@@ -80,6 +80,16 @@ export default {
 		channel: Object,
 		focused: String,
 	},
+	data: function () {
+		return {
+			smartFilterIdx: 0,
+			// TODO fix this
+			smartFilterTimeDeltaMin: 15,
+			smartFilterStateMsgsToShow: new Map(), // messages idx to bool
+			nicksLastSpeakTime: new Map(), // nick to time
+			nicksLastStatusMsg: new Map(), // nick to messages idx
+		};
+	},
 	computed: {
 		condensedMessages() {
 			if (this.channel.type !== "channel") {
@@ -91,6 +101,17 @@ export default {
 				return this.channel.messages.filter(
 					(message) => !constants.condensedTypes.has(message.type)
 				);
+			}
+
+			// smart filter
+			if (true) {
+				return this.channel.messages.filter((message, idx) => {
+					if (!constants.condensedTypes.has(message.type)) {
+						return true;
+					}
+
+					return this.smartFilterStateMsgsToShow.has(idx);
+				});
 			}
 
 			// If actions are not condensed, just return raw message list
@@ -154,6 +175,7 @@ export default {
 		},
 		"channel.messages"() {
 			this.keepScrollPosition();
+			this.updateSmartFilter();
 		},
 		"channel.pendingMessage"() {
 			this.$nextTick(() => {
@@ -344,6 +366,144 @@ export default {
 
 			const el = this.$refs.chat;
 			el.scrollTop = el.scrollHeight;
+		},
+		updateSmartFilter() {
+			if (this.channel.type !== "channel") {
+				return; // we don't care about special buffers
+			}
+
+			if (!this.channel.messages) {
+				return;
+			}
+
+			const now = Date.now(); // single time point during function execution
+
+			for (; this.smartFilterIdx < this.channel.messages.length; this.smartFilterIdx++) {
+				const msg = this.channel.messages[this.smartFilterIdx];
+
+				if (!this.timeInSmartFilterWindow(now, msg.time)) {
+					continue;
+				}
+
+				if (msg.type === "message" || msg.type === "notice" || msg.type === "action") {
+					// two concerns, either the nick just joined and we want to show
+					// this, or the nick may leave soon and we need to keep track of
+					// when they last spoke
+					this.nicksLastSpeakTime.set(msg.from.nick, msg.time);
+					const lastStatusIdx = this.nicksLastStatusMsg.get(msg.from.nick);
+
+					if (lastStatusIdx === undefined) {
+						continue;
+					}
+
+					if (
+						this.timeInSmartFilterWindow(now, this.channel.messages[lastStatusIdx].time)
+					) {
+						this.smartFilterStateMsgsToShow.set(lastStatusIdx, true);
+						continue;
+					} else {
+						// if the time window is larger than what we care about there's
+						// no point in keeping track of it any longer
+						this.nicksLastStatusMsg.delete(msg.from.nick);
+						continue;
+					}
+				} else if (msg.type === "mode" || msg.type === "kick") {
+					// this messages are considered important and always shown.
+					// mode changes are usually an admin flexing and kicks should be
+					// shown so that people know that ops did their job
+					this.smartFilterStateMsgsToShow.set(this.smartFilterIdx, true);
+					// we don't delete the state of the victim, should they rejoin
+					// immediately this should be visible
+					continue;
+				} else if (msg.type === "join") {
+					const lastStatusIdx = this.nicksLastStatusMsg.get(msg.from.nick);
+
+					this.nicksLastStatusMsg.set(msg.from.nick, this.smartFilterIdx);
+
+					if (lastStatusIdx === undefined) {
+						continue;
+					}
+
+					if (
+						this.timeInSmartFilterWindow(now, this.channel.messages[lastStatusIdx].time)
+					) {
+						this.smartFilterStateMsgsToShow.set(lastStatusIdx, true);
+					}
+
+					continue;
+				} else if (msg.type === "nick") {
+					// here we need to track information across nicks, as new incoming
+					// events will have the new nick and old ones are already marked
+					// there's no need to leave the old nick in place
+					if (this.nicksLastSpeakTime.has(msg.from.nick)) {
+						this.nicksLastSpeakTime.set(
+							msg.new_nick,
+							this.nicksLastSpeakTime.get(msg.from.nick)
+						);
+						this.nicksLastSpeakTime.delete(msg.from.nick);
+
+						if (
+							this.timeInSmartFilterWindow(
+								now,
+								this.nicksLastSpeakTime.get(msg.new_nick)
+							)
+						) {
+							this.smartFilterStateMsgsToShow.set(this.smartFilterIdx, true);
+						}
+					}
+
+					if (this.nicksLastStatusMsg.has(msg.from.nick)) {
+						this.nicksLastStatusMsg.set(
+							msg.new_nick,
+							this.nicksLastStatusMsg.get(msg.from.nick)
+						);
+						this.nicksLastStatusMsg.delete(msg.from.nick);
+
+						// TODO: we need to use a list so that we can track
+						// 1) join as dummy
+						// 2) dummy changes nick to blah
+						// 3) blah talks
+						// we really want to see 1 and 2 not just either one
+					}
+
+					continue;
+				} else if (msg.type === "quit" || msg.type === "part") {
+					const lastSpokeTime = this.nicksLastSpeakTime.get(msg.from.nick);
+
+					if (lastSpokeTime && this.timeInSmartFilterWindow(now, lastSpokeTime)) {
+						this.smartFilterStateMsgsToShow.set(this.smartFilterIdx, true);
+						continue;
+					} else {
+						// if the time window is larger than what we care about there's
+						// no point in keeping track of it any longer
+						this.nicksLastSpeakTime.delete(msg.from.nick);
+						continue;
+					}
+				} else {
+					continue; // all other messages are ignored
+				}
+			}
+		},
+		timeInSmartFilterWindow(now, testdate) {
+			if (typeof now === "string") {
+				now = Date.parse(now);
+			}
+
+			if (typeof testdate === "string") {
+				testdate = Date.parse(testdate);
+			}
+
+			if (testdate > now) {
+				return false; // testdate is in the future, shouldn't happen
+			}
+
+			const diff = (now - testdate) / 1000 / 60;
+
+			if (diff <= this.smartFilterTimeDeltaMin) {
+				return true;
+			}
+
+			return false;
 		},
 	},
 };
