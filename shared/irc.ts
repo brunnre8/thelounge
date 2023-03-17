@@ -5,14 +5,4 @@ export function cleanIrcMessage(message: string) {
 	return message.replace(matchFormatting, "").trim();
 }
 
-export const condensedTypes = new Set([
-	"away",
-	"back",
-	"chghost",
-	"join",
-	"kick",
-	"mode",
-	"nick",
-	"part",
-	"quit",
-]);
+export const condensedTypes = new Set(["away", "back", "chghost", "join", "nick", "part", "quit"]);
