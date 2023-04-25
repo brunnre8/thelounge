@@ -554,9 +554,8 @@ function printPullRequest(pullRequest) {
 
 // Builds a Markdown list item for a commit made directly in `master`
 function printCommit(commit) {
-	return `- ${commit.messageHeadline} (${printEntryLink(commit)} ${printAuthorLink(
-		commit.author.user
-	)})`;
+	const author_link = commit.author.user ? printAuthorLink(commit.author.user) : "unknown author";
+	return `- ${commit.messageHeadline} (${printEntryLink(commit)} ${author_link})`;
 }
 
 // Builds a Markdown list of all given items
@@ -812,6 +811,10 @@ function dedupeEntries(changelog, items) {
 // (with format `@username`) of everyone who contributed to this version.
 function extractContributors(entries) {
 	const set = Object.values(entries).reduce((memo, {__typename, author}) => {
+		if (!author.user) {
+			return memo; // 🤷 happens apparently
+		}
+
 		if (__typename === "PullRequest" && author.__typename !== "Bot") {
 			memo.add("@" + author.login);
 			// Commit authors are *always* of type "User", so have to discriminate some
