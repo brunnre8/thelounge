@@ -87,16 +87,14 @@ async function install(packageName: string): Promise<void> {
 	const yarnVersion = isLocalFile ? packageName : `${metaData.name}@${metaData.version}`;
 	await yarn("add", "--exact", yarnVersion);
 
-	log.info(`${colors.green(humanVersion)} has been successfully installed.`);
-
-	if (!isLocalFile) {
-		return;
+	if (isLocalFile) {
+		// yarn v1 is buggy if a local filepath is used and doesn't update
+		// the lockfile properly. We need to run an install in that case
+		// even though that's supposed to be done by the add subcommand
+		await yarn("install");
 	}
 
-	// yarn v1 is buggy if a local filepath is used and doesn't update
-	// the lockfile properly. We need to run an install in that case
-	// even though that's supposed to be done by the add subcommand
-	await yarn("install");
+	log.info(`${colors.green(humanVersion)} has been successfully installed.`);
 }
 
 function expandTildeInLocalPath(packageName: string): string {
