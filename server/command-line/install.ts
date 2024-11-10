@@ -77,36 +77,15 @@ async function install(packageName: string): Promise<void> {
 
 	const humanVersion = isLocalFile ? packageName : `${metaData.name} v${metaData.version}`;
 
-	if (!isCustomMetaData(metaData)) {
-		throw new Error(`${colors.red(humanVersion)} does not have The Lounge metadata.`);
-	}
-
-	if (!metaData.thelounge.supports) {
-		throw new Error("'supports' is a required field in the thelounge meta data field.");
-	}
-
-	if (
-		!semver.satisfies(Helper.getVersionNumber(), metaData.thelounge.supports, {
-			includePrerelease: true,
-		})
-	) {
-		throw new Error(
-			`${colors.red(
-				humanVersion
-			)} does not support The Lounge v${Helper.getVersionNumber()}. Supported version(s): ${
-				metaData.thelounge.supports
-			}`
-		);
+	try {
+		validateMetaData(metaData);
+	} catch (err) {
+		`${colors.red(humanVersion)} ${err}`;
 	}
 
 	log.info(`Installing ${colors.green(humanVersion)}...`);
 	const yarnVersion = isLocalFile ? packageName : `${metaData.name}@${metaData.version}`;
-
-	try {
-		await Utils.executeYarnCommand("add", "--exact", yarnVersion);
-	} catch (returnCode) {
-		throw `Failed to install ${colors.red(humanVersion)}. Exit code: ${returnCode}`;
-	}
+	await yarn("add", "--exact", yarnVersion);
 
 	log.info(`${colors.green(humanVersion)} has been successfully installed.`);
 
@@ -117,11 +96,7 @@ async function install(packageName: string): Promise<void> {
 	// yarn v1 is buggy if a local filepath is used and doesn't update
 	// the lockfile properly. We need to run an install in that case
 	// even though that's supposed to be done by the add subcommand
-	try {
-		await Utils.executeYarnCommand("install");
-	} catch (returnCode) {
-		throw new Error(`Failed to update lockfile after package install. Exitcode ${returnCode}`);
-	}
+	await yarn("install");
 }
 
 function expandTildeInLocalPath(packageName: string): string {
@@ -131,6 +106,36 @@ function expandTildeInLocalPath(packageName: string): string {
 
 function isCustomMetaData(meta: FullMetadata | CustomMetadata): meta is CustomMetadata {
 	return "thelounge" in meta;
+}
+
+function validateMetaData(metaData: FullMetadata | CustomMetadata) {
+	if (!isCustomMetaData(metaData)) {
+		throw new Error(`does not have The Lounge metadata.`);
+	}
+
+	if (!metaData.thelounge.supports) {
+		throw new Error("required field 'supports' missing in the thelounge meta data.");
+	}
+
+	if (
+		!semver.satisfies(Helper.getVersionNumber(), metaData.thelounge.supports, {
+			includePrerelease: true,
+		})
+	) {
+		throw new Error(
+			`does not support The Lounge v${Helper.getVersionNumber()}. Supported version(s): ${
+				metaData.thelounge.supports
+			}`
+		);
+	}
+}
+
+async function yarn(cmd: string, ...args: string[]): Promise<void> {
+	try {
+		await Utils.executeYarnCommand(cmd, ...args);
+	} catch (returnCode) {
+		throw new Error(`Failed to update lockfile after package install. Exitcode ${returnCode}`);
+	}
 }
 
 export default program;
