@@ -81,6 +81,10 @@ async function install(packageName: string): Promise<void> {
 		throw new Error(`${colors.red(humanVersion)} does not have The Lounge metadata.`);
 	}
 
+	if (!metaData.thelounge.supports) {
+		throw new Error("'supports' is a required field in the thelounge meta data field.");
+	}
+
 	if (
 		!semver.satisfies(Helper.getVersionNumber(), metaData.thelounge.supports, {
 			includePrerelease: true,
