@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig.json to read more about this file */
     "composite": true /* Enable constraints that allow a TypeScript project to be used with project references. */,
     "target": "esnext",
     "module": "commonjs",
