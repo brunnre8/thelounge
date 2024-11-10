@@ -58,7 +58,7 @@ if (!Config.values.public) {
 // This is done by giving it the updated `argv` that `parseOptions` returned,
 // except it returns an object with `operands`/`unknown`, so we need to concat them.
 // See https://github.com/tj/commander.js/blob/fefda77f463292/index.js#L686-L763
-program.parse(argvWithoutOptions.operands.concat(argvWithoutOptions.unknown));
+await program.parseAsync(argvWithoutOptions.operands.concat(argvWithoutOptions.unknown));
 
 function createPackagesFolder() {
 	const packagesPath = Config.getPackagesPath();
