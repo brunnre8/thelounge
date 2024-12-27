@@ -77,11 +77,7 @@ async function install(packageName: string): Promise<void> {
 
 	const humanVersion = isLocalFile ? packageName : `${metaData.name} v${metaData.version}`;
 
-	try {
-		validateMetaData(metaData);
-	} catch (err) {
-		`${colors.red(humanVersion)} ${err}`;
-	}
+	validateMetaData(metaData);
 
 	log.info(`Installing ${colors.green(humanVersion)}...`);
 	const yarnVersion = isLocalFile ? packageName : `${metaData.name}@${metaData.version}`;
