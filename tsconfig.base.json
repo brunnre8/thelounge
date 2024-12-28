@@ -2,9 +2,9 @@
   "compilerOptions": {
     "composite": true /* Enable constraints that allow a TypeScript project to be used with project references. */,
     "target": "esnext",
-    "module": "commonjs",
+    "module": "node16",
     "rootDir": "./",
-    "moduleResolution": "node",
+    "verbatimModuleSyntax": true,
     "resolveJsonModule": true /* Enable importing .json files */,
     "allowJs": true /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */,
     "checkJs": true /* Enable error reporting in type-checked JavaScript files. */,
@@ -14,5 +14,5 @@
     "strict": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "exclude": ["./dist"]
+  "exclude": ["./dist"],
 }
