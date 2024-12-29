@@ -1,4 +1,4 @@
-import LinkifyIt, {Match} from "linkify-it";
+import LinkifyIt, {type Match} from "linkify-it";
 import tlds from "tlds";
 
 export type LinkPart = {

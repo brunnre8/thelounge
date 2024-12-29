@@ -1,11 +1,11 @@
-import _ from "lodash";
-import log from "../log";
+import {forOwn, find} from "lodash-es";
 import fs from "fs";
 import path from "path";
-import WebPushAPI from "web-push";
-import Config from "../config";
-import Client from "../client";
 import * as os from "os";
+import WebPushAPI from "web-push";
+import log from "../log.js";
+import Config from "../config.js";
+import Client from "../client.js";
 class WebPush {
 	vapidKeys?: {
 		publicKey: string;
@@ -70,9 +70,9 @@ class WebPush {
 	}
 
 	push(client: Client, payload: any, onlyToOffline: boolean) {
-		_.forOwn(client.config.sessions, ({pushSubscription}, token) => {
+		forOwn(client.config.sessions, ({pushSubscription}, token) => {
 			if (pushSubscription) {
-				if (onlyToOffline && _.find(client.attachedClients, {token}) !== undefined) {
+				if (onlyToOffline && find(client.attachedClients, {token}) !== undefined) {
 					return;
 				}
 
@@ -90,7 +90,7 @@ class WebPush {
 					)}), removing subscription`
 				);
 
-				_.forOwn(client.config.sessions, ({pushSubscription}, token) => {
+				forOwn(client.config.sessions, ({pushSubscription}, token) => {
 					if (pushSubscription && pushSubscription.endpoint === subscription.endpoint) {
 						client.unregisterPushSubscription(token);
 					}

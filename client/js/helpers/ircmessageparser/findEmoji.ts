@@ -1,5 +1,5 @@
 import emojiRegExp from "emoji-regex";
-import {Part} from "./merge";
+import {type Part} from "./merge.js";
 
 const regExp = emojiRegExp();
 

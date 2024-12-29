@@ -1,9 +1,9 @@
-import _ from "lodash";
-import log from "../log";
+import {has, set} from "lodash-es";
+import log from "../log.js";
 import colors from "chalk";
 import fs from "fs";
-import Helper from "../helper";
-import Config from "../config";
+import Helper from "../helper.js";
+import Config from "../config.js";
 import path from "path";
 import {spawn} from "child_process";
 let home: string;
@@ -93,10 +93,10 @@ class Utils {
 		const value = val.slice(position + 1);
 		const parsedValue = parseValue(value);
 
-		if (_.has(memo, key)) {
+		if (has(memo, key)) {
 			log.warn(`Configuration key ${colors.bold(key)} was already specified, ignoring...`);
 		} else {
-			memo = _.set(memo, key, parsedValue);
+			memo = set(memo, key, parsedValue);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-return

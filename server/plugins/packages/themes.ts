@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
-import _ from "lodash";
+import {pick, sortBy} from "lodash-es";
 
-import Config from "../../config";
-import Utils from "../../command-line/utils";
+import Config from "../../config.js";
+import Utils from "../../command-line/utils.js";
 
 type Module = {
 	type?: string;
@@ -53,10 +53,10 @@ function getAll() {
 	const filteredThemes: ThemeForClient[] = [];
 
 	for (const theme of themes.values()) {
-		filteredThemes.push(_.pick(theme, ["displayName", "name", "themeColor"]));
+		filteredThemes.push(pick(theme, ["displayName", "name", "themeColor"]));
 	}
 
-	return _.sortBy(filteredThemes, "displayName");
+	return sortBy(filteredThemes, "displayName");
 }
 
 function getByName(name: string) {

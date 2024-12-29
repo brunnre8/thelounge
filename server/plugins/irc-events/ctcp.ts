@@ -1,10 +1,10 @@
-import _ from "lodash";
-import {IrcEventHandler} from "../../client";
-import Helper from "../../helper";
-import Msg from "../../models/msg";
-import User from "../../models/user";
+import {throttle} from "lodash-es";
+import {type IrcEventHandler} from "../../client.js";
+import Helper from "../../helper.js";
+import Msg from "../../models/msg.js";
+import User from "../../models/user.js";
+import {MessageType} from "../../../shared/types/msg.js";
 import pkg from "../../../package.json";
-import {MessageType} from "../../../shared/types/msg";
 
 const ctcpResponses = {
 	CLIENTINFO: () =>
@@ -47,7 +47,7 @@ export default <IrcEventHandler>function (irc, network) {
 	// Limit requests to a rate of one per second max
 	irc.on(
 		"ctcp request",
-		_.throttle(
+		throttle(
 			(data) => {
 				// Ignore echoed ctcp requests that aren't targeted at us
 				// See https://github.com/kiwiirc/irc-framework/issues/225

@@ -1,9 +1,9 @@
-import _ from "lodash";
+import {extend} from "lodash-es";
 import express from "express";
-import Network from "../server/models/network";
-import Chan from "../server/models/chan";
 import {EventEmitter} from "events";
-import {Message} from "../server/models/msg";
+import Network from "../server/models/network.js";
+import Chan from "../server/models/chan.js";
+import {type Message} from "../server/models/msg.js";
 
 class MockClient extends EventEmitter {
 	config: {
@@ -19,7 +19,7 @@ class MockClient extends EventEmitter {
 	}
 
 	createMessage(opts: any) {
-		const message = _.extend(
+		const message = extend(
 			{
 				text: "dummy message",
 				nick: "test-user",

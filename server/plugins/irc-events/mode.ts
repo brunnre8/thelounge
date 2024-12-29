@@ -1,8 +1,7 @@
-import _ from "lodash";
-import {IrcEventHandler} from "../../client";
-
-import Msg from "../../models/msg";
-import {MessageType} from "../../../shared/types/msg";
+import {pull} from "lodash-es";
+import {type IrcEventHandler} from "../../client.js";
+import Msg from "../../models/msg.js";
+import {MessageType} from "../../../shared/types/msg.js";
 
 export default <IrcEventHandler>function (irc, network) {
 	const client = this;
@@ -123,7 +122,7 @@ export default <IrcEventHandler>function (irc, network) {
 			const changedMode = network.serverOptions.PREFIX.modeToSymbol[char];
 
 			if (!add) {
-				_.pull(user.modes, changedMode);
+				pull(user.modes, changedMode);
 			} else if (!user.modes.includes(changedMode)) {
 				user.modes.push(changedMode);
 				user.modes.sort(function (a, b) {

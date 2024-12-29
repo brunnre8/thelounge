@@ -1,12 +1,11 @@
-import _ from "lodash";
-import {IrcEventHandler} from "../../client";
-
-import log from "../../log";
-import Msg from "../../models/msg";
-import Helper from "../../helper";
-import Config from "../../config";
-import {MessageType} from "../../../shared/types/msg";
-import {ChanType, ChanState} from "../../../shared/types/chan";
+import {size} from "lodash-es";
+import {type IrcEventHandler} from "../../client.js";
+import log from "../../log.js";
+import Msg from "../../models/msg.js";
+import Helper from "../../helper.js";
+import Config from "../../config.js";
+import {MessageType} from "../../../shared/types/msg.js";
+import {ChanType, ChanState} from "../../../shared/types/chan.js";
 
 export default <IrcEventHandler>function (irc, network) {
 	const client = this;
@@ -34,7 +33,7 @@ export default <IrcEventHandler>function (irc, network) {
 		if (network.awayMessage) {
 			irc.raw("AWAY", network.awayMessage);
 			// Only set generic away message if there are no clients attached
-		} else if (client.awayMessage && _.size(client.attachedClients) === 0) {
+		} else if (client.awayMessage && size(client.attachedClients) === 0) {
 			irc.raw("AWAY", client.awayMessage);
 		}
 

@@ -1,6 +1,6 @@
 // Return true if any section of "a" or "b" parts (defined by their start/end
 
-import {Part} from "./merge";
+import {type Part} from "./merge.js";
 
 // markers) intersect each other, false otherwise.
 function anyIntersection(a: Part, b: Part) {

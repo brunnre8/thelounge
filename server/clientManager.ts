@@ -1,15 +1,15 @@
-import _ from "lodash";
+import {debounce, difference, find, without} from "lodash-es";
 import colors from "chalk";
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 
-import Auth from "./plugins/auth";
-import Client, {UserConfig} from "./client";
-import Config from "./config";
-import WebPush from "./plugins/webpush";
-import log from "./log";
-import {Server} from "./server";
+import Auth from "./plugins/auth.js";
+import Client, {type UserConfig} from "./client.js";
+import Config from "./config.js";
+import WebPush from "./plugins/webpush.js";
+import log from "./log.js";
+import {type Server} from "./server.js";
 
 class ClientManager {
 	clients: Client[];
@@ -88,7 +88,7 @@ class ClientManager {
 	autoloadUsers() {
 		fs.watch(
 			Config.getUsersPath(),
-			_.debounce(
+			debounce(
 				() => {
 					const loaded = this.clients.map((c) => c.name);
 					const updatedUsers = this.getUsers();
@@ -105,12 +105,12 @@ class ClientManager {
 					updatedUsers.forEach((name) => this.loadUser(name));
 
 					// Existing users removed since last time users were loaded
-					_.difference(loaded, updatedUsers).forEach((name) => {
-						const client = _.find(this.clients, {name});
+					difference(loaded, updatedUsers).forEach((name) => {
+						const client = find(this.clients, {name});
 
 						if (client) {
 							client.quit(true);
-							this.clients = _.without(this.clients, client);
+							this.clients = without(this.clients, client);
 							log.info(`User ${colors.bold(name)} disconnected and removed.`);
 						}
 					});

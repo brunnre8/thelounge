@@ -1,6 +1,6 @@
-import _ from "lodash";
-import {Server as wsServer} from "ws";
-import express, {NextFunction, Request, Response} from "express";
+import {template, isPlainObject, find, map, reduce, clone, pick, without} from "lodash-es";
+import {WebSocketServer} from "ws";
+import express, {type NextFunction, type Request, type Response} from "express";
 import fs from "fs";
 import path from "path";
 import {Server as ioServer, Socket as ioSocket} from "socket.io";
@@ -8,37 +8,37 @@ import dns from "dns";
 import colors from "chalk";
 import net from "net";
 
-import log from "./log";
-import Client from "./client";
-import ClientManager from "./clientManager";
-import Uploader from "./plugins/uploader";
-import Helper from "./helper";
-import Config, {ConfigType} from "./config";
-import Identification from "./identification";
-import changelog from "./plugins/changelog";
-import inputs from "./plugins/inputs";
-import Auth from "./plugins/auth";
+import log from "./log.js";
+import Client from "./client.js";
+import ClientManager from "./clientManager.js";
+import Uploader from "./plugins/uploader.js";
+import Helper from "./helper.js";
+import Config, {type ConfigType} from "./config.js";
+import Identification from "./identification.js";
+import changelog from "./plugins/changelog.js";
+import inputs from "./plugins/inputs/index.js";
+import Auth from "./plugins/auth.js";
 
-import themes from "./plugins/packages/themes";
+import themes from "./plugins/packages/themes.js";
 themes.loadLocalThemes();
 
-import packages from "./plugins/packages/index";
-import {NetworkWithIrcFramework} from "./models/network";
-import Utils from "./command-line/utils";
+import packages from "./plugins/packages/index.js";
+import {type NetworkWithIrcFramework} from "./models/network.js";
+import Utils from "./command-line/utils.js";
 import type {
 	ClientToServerEvents,
 	ServerToClientEvents,
 	InterServerEvents,
 	SocketData,
 	AuthPerformData,
-} from "../shared/types/socket-events";
-import {ChanType} from "../shared/types/chan";
-import {
+} from "../shared/types/socket-events.js";
+import {ChanType} from "../shared/types/chan.js";
+import type {
 	LockedSharedConfiguration,
 	SharedConfiguration,
 	ConfigNetDefaults,
 	LockedConfigNetDefaults,
-} from "../shared/types/config";
+} from "../shared/types/config.js";
 
 type ServerOptions = {
 	dev: boolean;
@@ -219,7 +219,7 @@ export default async function (
 		}
 
 		const sockets: Server = new ioServer(server, {
-			wsEngine: wsServer,
+			wsEngine: WebSocketServer,
 			cookie: false,
 			serveClient: false,
 
@@ -418,7 +418,7 @@ function indexRequest(_req: Request, res: Response) {
 			...{cacheBust: Helper.getVersionCacheBust()},
 		};
 
-		res.send(_.template(file)(config));
+		res.send(template(file)(config));
 	});
 }
 
@@ -455,13 +455,13 @@ function initializeClient(
 	});
 
 	socket.on("input", (data) => {
-		if (_.isPlainObject(data)) {
+		if (isPlainObject(data)) {
 			client.input(data);
 		}
 	});
 
 	socket.on("more", (data) => {
-		if (_.isPlainObject(data)) {
+		if (isPlainObject(data)) {
 			const history = client.more(data);
 
 			if (history !== null) {
@@ -471,7 +471,7 @@ function initializeClient(
 	});
 
 	socket.on("network:new", (data) => {
-		if (_.isPlainObject(data)) {
+		if (isPlainObject(data)) {
 			// prevent people from overriding webirc settings
 			data.uuid = null;
 			data.commands = null;
@@ -486,7 +486,7 @@ function initializeClient(
 			return;
 		}
 
-		const network = _.find(client.networks, {uuid: data});
+		const network = find(client.networks, {uuid: data});
 
 		if (!network) {
 			return;
@@ -496,11 +496,11 @@ function initializeClient(
 	});
 
 	socket.on("network:edit", (data) => {
-		if (!_.isPlainObject(data)) {
+		if (!isPlainObject(data)) {
 			return;
 		}
 
-		const network = _.find(client.networks, {uuid: data.uuid});
+		const network = find(client.networks, {uuid: data.uuid});
 
 		if (!network) {
 			return;
@@ -510,14 +510,14 @@ function initializeClient(
 	});
 
 	socket.on("history:clear", (data) => {
-		if (_.isPlainObject(data)) {
+		if (isPlainObject(data)) {
 			client.clearHistory(data);
 		}
 	});
 
 	if (!Config.values.public && !Config.values.ldap.enable) {
 		socket.on("change-password", (data) => {
-			if (_.isPlainObject(data)) {
+			if (isPlainObject(data)) {
 				const old = data.old_password;
 				const p1 = data.new_password;
 				const p2 = data.verify_password;
@@ -562,7 +562,7 @@ function initializeClient(
 	});
 
 	socket.on("sort:networks", (data) => {
-		if (!_.isPlainObject(data)) {
+		if (!isPlainObject(data)) {
 			return;
 		}
 
@@ -574,7 +574,7 @@ function initializeClient(
 	});
 
 	socket.on("sort:channels", (data) => {
-		if (!_.isPlainObject(data)) {
+		if (!isPlainObject(data)) {
 			return;
 		}
 
@@ -586,7 +586,7 @@ function initializeClient(
 	});
 
 	socket.on("names", (data) => {
-		if (_.isPlainObject(data)) {
+		if (isPlainObject(data)) {
 			client.names(data);
 		}
 	});
@@ -606,7 +606,7 @@ function initializeClient(
 	// so there's no need to handle msg:preview:toggle
 	if (!Config.values.public) {
 		socket.on("msg:preview:toggle", (data) => {
-			if (_.isPlainObject(data)) {
+			if (isPlainObject(data)) {
 				return;
 			}
 
@@ -691,10 +691,10 @@ function initializeClient(
 
 	const sendSessionList = () => {
 		// TODO: this should use the ClientSession type currently in client
-		const sessions = _.map(client.config.sessions, (session, sessionToken) => {
+		const sessions = map(client.config.sessions, (session, sessionToken) => {
 			return {
 				current: sessionToken === token,
-				active: _.reduce(
+				active: reduce(
 					client.attachedClients,
 					(count, attachedClient) =>
 						count + (attachedClient.token === sessionToken ? 1 : 0),
@@ -714,7 +714,7 @@ function initializeClient(
 
 	if (!Config.values.public) {
 		socket.on("setting:set", (newSetting) => {
-			if (!_.isPlainObject(newSetting)) {
+			if (!isPlainObject(newSetting)) {
 				return;
 			}
 
@@ -812,7 +812,7 @@ function initializeClient(
 
 		client.save();
 
-		_.map(client.attachedClients, (attachedClient, socketId) => {
+		map(client.attachedClients, (attachedClient, socketId) => {
 			if (attachedClient.token !== tokenToSignOut) {
 				return;
 			}
@@ -887,7 +887,7 @@ function getClientConfiguration(): SharedConfiguration | LockedSharedConfigurati
 
 	if (!Config.values.lockNetwork) {
 		const defaults: ConfigNetDefaults = {
-			..._.clone(Config.values.defaults),
+			...clone(Config.values.defaults),
 			...defaultsOverride,
 		};
 		const result: SharedConfiguration = {
@@ -900,7 +900,7 @@ function getClientConfiguration(): SharedConfiguration | LockedSharedConfigurati
 
 	// Only send defaults that are visible on the client
 	const defaults: LockedConfigNetDefaults = {
-		..._.pick(Config.values.defaults, ["name", "username", "password", "realname", "join"]),
+		...pick(Config.values.defaults, ["name", "username", "password", "realname", "join"]),
 		...defaultsOverride,
 	};
 
@@ -918,7 +918,7 @@ function getServerConfiguration(): ServerConfiguration {
 }
 
 function performAuthentication(this: Socket, data: AuthPerformData) {
-	if (!_.isPlainObject(data)) {
+	if (!isPlainObject(data)) {
 		return;
 	}
 
@@ -993,7 +993,7 @@ function performAuthentication(this: Socket, data: AuthPerformData) {
 
 		const cb_client = client; // ensure TS can see we never have a nil client
 		socket.on("disconnect", function () {
-			manager!.clients = _.without(manager!.clients, cb_client);
+			manager!.clients = without(manager!.clients, cb_client);
 			cb_client.quit();
 		});
 

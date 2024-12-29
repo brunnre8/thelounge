@@ -1,9 +1,9 @@
-import Client from "../../client";
-import log from "../../log";
-import Chan, {Channel} from "../../models/chan";
-import Network, {NetworkWithIrcFramework} from "../../models/network";
-import {PackageInfo} from "../packages";
-import PublicClient from "../packages/publicClient";
+import Client from "../../client.js";
+import log from "../../log.js";
+import Chan, {type Channel} from "../../models/chan.js";
+import Network, {type NetworkWithIrcFramework} from "../../models/network.js";
+import {type PackageInfo} from "../packages/index.js";
+import PublicClient from "../packages/publicClient.js";
 
 export type PluginInputHandler = (
 	this: Client,

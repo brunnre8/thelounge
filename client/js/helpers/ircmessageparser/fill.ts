@@ -1,7 +1,7 @@
 // Create plain text entries corresponding to areas of the text that match no
 // existing entries. Returns an empty array if all parts of the text have been
 
-import {Part} from "./merge";
+import {type Part} from "./merge.js";
 
 // parsed into recognizable entries already.
 function fill(existingEntries: Part[], text: string) {

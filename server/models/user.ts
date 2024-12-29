@@ -1,5 +1,5 @@
-import _ from "lodash";
-import Prefix from "./prefix";
+import {defaults} from "lodash-es";
+import Prefix from "./prefix.js";
 
 class User {
 	modes!: string[];
@@ -10,7 +10,7 @@ class User {
 	lastMessage!: number;
 
 	constructor(attr: Partial<User>, prefix?: Prefix) {
-		_.defaults(this, attr, {
+		defaults(this, attr, {
 			modes: [],
 			away: "",
 			nick: "",

@@ -1,8 +1,8 @@
-import _ from "lodash";
+import {type DebouncedFunc, debounce} from "lodash-es";
 import fs from "fs";
 import path from "path";
-import log from "../log";
-import Config from "../config";
+import log from "../log.js";
+import Config from "../config.js";
 
 type PolicyOption = {
 	port: number;
@@ -15,7 +15,7 @@ type PolicyMap = Map<string, Omit<PolicyOption, "host">>;
 
 class STSPolicies {
 	stsFile: string;
-	refresh: _.DebouncedFunc<any>;
+	refresh: DebouncedFunc<any>;
 
 	private policies: PolicyMap;
 
@@ -23,7 +23,7 @@ class STSPolicies {
 		this.stsFile = path.join(Config.getHomePath(), "sts-policies.json");
 		this.policies = new Map();
 		// eslint-disable-next-line @typescript-eslint/unbound-method
-		this.refresh = _.debounce(this.saveFile, 10000, {maxWait: 60000});
+		this.refresh = debounce(this.saveFile, 10000, {maxWait: 60000});
 
 		if (!fs.existsSync(this.stsFile)) {
 			return;

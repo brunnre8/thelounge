@@ -1,5 +1,5 @@
-import _ from "lodash";
-import {MessageType, LinkPreview, UserInMessage} from "../../shared/types/msg";
+import {defaults} from "lodash-es";
+import {MessageType, type LinkPreview, type UserInMessage} from "../../shared/types/msg.js";
 
 class Msg {
 	from!: UserInMessage;
@@ -51,7 +51,7 @@ class Msg {
 			});
 		}
 
-		_.defaults(this, attr, {
+		defaults(this, attr, {
 			from: {},
 			id: 0,
 			previews: [],

@@ -19,8 +19,8 @@
 <script lang="ts">
 import constants from "../js/constants";
 import eventbus from "../js/eventbus";
-import Mousetrap, {ExtendedKeyboardEvent} from "mousetrap";
-import throttle from "lodash/throttle";
+import Mousetrap, {type ExtendedKeyboardEvent} from "mousetrap";
+import {throttle, type DebouncedFunc} from "lodash-es";
 import storage from "../js/localStorage";
 import isIgnoredKeybind from "../js/helpers/isIgnoredKeybind";
 
@@ -36,11 +36,10 @@ import {
 	onBeforeUnmount,
 	onMounted,
 	ref,
-	Ref,
-	InjectionKey,
+	type Ref,
+	type InjectionKey,
 } from "vue";
 import {useStore} from "../js/store";
-import type {DebouncedFunc} from "lodash";
 
 export const imageViewerKey = Symbol() as InjectionKey<Ref<typeof ImageViewer | null>>;
 const contextMenuKey = Symbol() as InjectionKey<Ref<typeof ContextMenu | null>>;

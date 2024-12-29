@@ -1,17 +1,17 @@
-import _ from "lodash";
+import {defaults, escapeRegExp, pick, find} from "lodash-es";
 import {v4 as uuidv4} from "uuid";
 import IrcFramework, {Client as IRCClient} from "irc-framework";
-import Chan, {ChanConfig, Channel} from "./chan";
-import Msg from "./msg";
-import Prefix from "./prefix";
-import Helper, {Hostmask} from "../helper";
-import Config, {WebIRC} from "../config";
-import STSPolicies from "../plugins/sts";
-import ClientCertificate, {ClientCertificateType} from "../plugins/clientCertificate";
-import Client from "../client";
-import {MessageType} from "../../shared/types/msg";
-import {ChanType} from "../../shared/types/chan";
-import {SharedNetwork} from "../../shared/types/network";
+import Chan, {type ChanConfig, type Channel} from "./chan.js";
+import Msg from "./msg.js";
+import Prefix from "./prefix.js";
+import Helper, {type Hostmask} from "../helper.js";
+import Config, {type WebIRC} from "../config.js";
+import STSPolicies from "../plugins/sts.js";
+import ClientCertificate, {type ClientCertificateType} from "../plugins/clientCertificate.js";
+import Client from "../client.js";
+import {MessageType} from "../../shared/types/msg.js";
+import {ChanType} from "../../shared/types/chan.js";
+import {type SharedNetwork} from "../../shared/types/network.js";
 
 type NetworkIrcOptions = {
 	host: string;
@@ -134,7 +134,7 @@ class Network {
 	hasSTSPolicy!: boolean;
 
 	constructor(attr?: Partial<Network>) {
-		_.defaults(this, attr, {
+		defaults(this, attr, {
 			name: "",
 			nick: "",
 			host: "",
@@ -481,7 +481,7 @@ class Network {
 			// Do not match characters and numbers (unless IRC color)
 			"(?:^|[^a-z0-9]|\x03[0-9]{1,2})" +
 				// Escape nickname, as it may contain regex stuff
-				_.escapeRegExp(nick) +
+				escapeRegExp(nick) +
 				// Do not match characters and numbers
 				"(?:[^a-z0-9]|$)",
 
@@ -597,7 +597,7 @@ class Network {
 			fieldsToReturn.push("rejectUnauthorized");
 		}
 
-		const data = _.pick(this, fieldsToReturn) as Network;
+		const data = pick(this, fieldsToReturn) as Network;
 
 		data.hasSTSPolicy = !!STSPolicies.get(this.host);
 
@@ -605,7 +605,7 @@ class Network {
 	}
 
 	export() {
-		const network = _.pick(this, [
+		const network = pick(this, [
 			"uuid",
 			"awayMessage",
 			"nick",
@@ -645,7 +645,7 @@ class Network {
 					keys.push("type");
 				}
 
-				return _.pick(chan, keys);
+				return pick(chan, keys);
 				// Override the type because we're omitting ID
 			}) as Channel[];
 
@@ -655,7 +655,7 @@ class Network {
 	getChannel(name: string) {
 		name = name.toLowerCase();
 
-		return _.find(this.channels, function (that, i) {
+		return find(this.channels, function (that, i) {
 			// Skip network lobby (it's always unshifted into first position)
 			return i > 0 && that.name.toLowerCase() === name;
 		});

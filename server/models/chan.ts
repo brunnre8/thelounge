@@ -1,15 +1,15 @@
-import _ from "lodash";
-import log from "../log";
-import Config from "../config";
-import User from "./user";
-import Msg from "./msg";
-import storage from "../plugins/storage";
-import Client from "../client";
-import Network from "./network";
-import Prefix from "./prefix";
-import {MessageType, SharedMsg} from "../../shared/types/msg";
-import {ChanType, SpecialChanType, ChanState} from "../../shared/types/chan";
-import {SharedNetworkChan} from "../../shared/types/network";
+import {defaults, find} from "lodash-es";
+import log from "../log.js";
+import Config from "../config.js";
+import User from "./user.js";
+import Msg from "./msg.js";
+import storage from "../plugins/storage.js";
+import Client from "../client.js";
+import Network from "./network.js";
+import Prefix from "./prefix.js";
+import {MessageType, type SharedMsg} from "../../shared/types/msg.js";
+import {ChanType, SpecialChanType, ChanState} from "../../shared/types/chan.js";
+import {type SharedNetworkChan} from "../../shared/types/network.js";
 
 export type ChanConfig = {
 	name: string;
@@ -40,7 +40,7 @@ class Chan {
 	num_users?: number;
 
 	constructor(attr?: Partial<Chan>) {
-		_.defaults(this, attr, {
+		defaults(this, attr, {
 			id: 0,
 			messages: [],
 			name: "",
@@ -65,7 +65,7 @@ class Chan {
 		msg.id = client.idMsg++;
 
 		// If this channel is open in any of the clients, do not increase unread counter
-		const isOpen = _.find(client.attachedClients, {openChannel: chanId}) !== undefined;
+		const isOpen = find(client.attachedClients, {openChannel: chanId}) !== undefined;
 
 		if (msg.self) {
 			// reset counters/markers when receiving self-/echo-message

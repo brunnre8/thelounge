@@ -2,14 +2,14 @@
 import path from "path";
 import fs, {Stats} from "fs";
 import os from "os";
-import _ from "lodash";
+import {mergeWith, isArray, isEmpty} from "lodash-es";
 import colors from "chalk";
-import {SearchOptions} from "ldapjs";
+import {type SearchOptions} from "ldapjs";
 
-import log from "./log";
-import Helper from "./helper";
-import Utils from "./command-line/utils";
-import Network from "./models/network";
+import log from "./log.js";
+import Helper from "./helper.js";
+import Utils from "./command-line/utils.js";
+import Network from "./models/network.js";
 
 // TODO: Type this
 export type WebIRC = {
@@ -184,7 +184,8 @@ class Config {
 			}
 		}
 
-		return _.mergeWith(oldConfig, newConfig, (objValue, srcValue, key) => {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+		return mergeWith(oldConfig, newConfig, (objValue, srcValue, key) => {
 			// Do not override config variables if the type is incorrect (e.g. object changed into a string)
 			if (
 				typeof objValue !== "undefined" &&
@@ -198,7 +199,7 @@ class Config {
 			}
 
 			// For arrays, simply override the value with user provided one.
-			if (_.isArray(objValue)) {
+			if (isArray(objValue)) {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 				return srcValue;
 			}
@@ -214,7 +215,7 @@ class Config {
 		if (fs.existsSync(configPath)) {
 			const userConfig = require(configPath);
 
-			if (_.isEmpty(userConfig)) {
+			if (isEmpty(userConfig)) {
 				log.warn(
 					`The file located at ${colors.green(
 						configPath

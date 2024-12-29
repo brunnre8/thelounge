@@ -1,30 +1,43 @@
-import _ from "lodash";
 import UAParser from "ua-parser-js";
 import {v4 as uuidv4} from "uuid";
-import escapeRegExp from "lodash/escapeRegExp";
+import {
+	escapeRegExp,
+	merge,
+	isPlainObject,
+	forOwn,
+	find,
+	assign,
+	without,
+	size,
+	debounce,
+} from "lodash-es";
 import crypto from "crypto";
 import colors from "chalk";
 
-import log from "./log";
-import Chan, {ChanConfig} from "./models/chan";
-import Msg from "./models/msg";
-import Config from "./config";
-import {condensedTypes} from "../shared/irc";
-import {MessageType} from "../shared/types/msg";
-import {SharedMention} from "../shared/types/mention";
+import log from "./log.js";
+import Chan, {type ChanConfig} from "./models/chan.js";
+import Msg from "./models/msg.js";
+import Config from "./config.js";
+import {condensedTypes} from "../shared/irc.js";
+import {MessageType} from "../shared/types/msg.js";
+import {type SharedMention} from "../shared/types/mention.js";
 
-import inputs from "./plugins/inputs";
-import PublicClient from "./plugins/packages/publicClient";
-import SqliteMessageStorage from "./plugins/messageStorage/sqlite";
-import TextFileMessageStorage from "./plugins/messageStorage/text";
-import Network, {IgnoreListItem, NetworkConfig, NetworkWithIrcFramework} from "./models/network";
-import ClientManager from "./clientManager";
-import {MessageStorage} from "./plugins/messageStorage/types";
-import {StorageCleaner} from "./storageCleaner";
-import {SearchQuery, SearchResponse} from "../shared/types/storage";
-import {SharedChan, ChanType} from "../shared/types/chan";
-import {SharedNetwork} from "../shared/types/network";
-import {ServerToClientEvents} from "../shared/types/socket-events";
+import inputs from "./plugins/inputs/index.js";
+import PublicClient from "./plugins/packages/publicClient.js";
+import SqliteMessageStorage from "./plugins/messageStorage/sqlite.js";
+import TextFileMessageStorage from "./plugins/messageStorage/text.js";
+import Network, {
+	type IgnoreListItem,
+	type NetworkConfig,
+	type NetworkWithIrcFramework,
+} from "./models/network.js";
+import ClientManager from "./clientManager.js";
+import {type MessageStorage} from "./plugins/messageStorage/types.js";
+import {StorageCleaner} from "./storageCleaner.js";
+import {type SearchQuery, type SearchResponse} from "../shared/types/storage.js";
+import {type SharedChan, ChanType} from "../shared/types/chan.js";
+import {type SharedNetwork} from "../shared/types/network.js";
+import {type ServerToClientEvents} from "../shared/types/socket-events.js";
 
 const events = [
 	"away",
@@ -108,7 +121,7 @@ class Client {
 
 	constructor(manager: ClientManager, name?: string, config = {} as UserConfig) {
 		this.id = uuidv4();
-		_.merge(this, {
+		merge(this, {
 			awayMessage: "",
 			lastActiveChannel: -1,
 			attachedClients: {},
@@ -154,15 +167,15 @@ class Client {
 			}
 		}
 
-		if (!_.isPlainObject(client.config.sessions)) {
+		if (!isPlainObject(client.config.sessions)) {
 			client.config.sessions = {};
 		}
 
-		if (!_.isPlainObject(client.config.clientSettings)) {
+		if (!isPlainObject(client.config.clientSettings)) {
 			client.config.clientSettings = {};
 		}
 
-		if (!_.isPlainObject(client.config.browser)) {
+		if (!isPlainObject(client.config.browser)) {
 			client.config.browser = {};
 		}
 
@@ -174,7 +187,7 @@ class Client {
 
 		client.compileCustomHighlights();
 
-		_.forOwn(client.config.sessions, (session) => {
+		forOwn(client.config.sessions, (session) => {
 			if (session.pushSubscription) {
 				this.registerPushSubscription(session, session.pushSubscription, true);
 			}
@@ -237,7 +250,7 @@ class Client {
 		let chan: Chan | null | undefined = null;
 
 		for (const n of this.networks) {
-			chan = _.find(n.channels, {id: channelId});
+			chan = find(n.channels, {id: channelId});
 
 			if (chan) {
 				network = n;
@@ -419,7 +432,7 @@ class Client {
 			}
 		}
 
-		client.config.sessions[token] = _.assign(client.config.sessions[token], {
+		client.config.sessions[token] = assign(client.config.sessions[token], {
 			lastUse: Date.now(),
 			ip: ip,
 			agent: friendlyAgent,
@@ -695,7 +708,7 @@ class Client {
 	}
 
 	sortChannels(netid: SharedNetwork["uuid"], order: SharedChan["id"][]) {
-		const network = _.find(this.networks, {uuid: netid});
+		const network = find(this.networks, {uuid: netid});
 
 		if (!network) {
 			return;
@@ -745,7 +758,7 @@ class Client {
 
 	part(network: Network, chan: Chan) {
 		const client = this;
-		network.channels = _.without(network.channels, chan);
+		network.channels = without(network.channels, chan);
 		client.mentions = client.mentions.filter((msg) => !(msg.chanId === chan.id));
 		chan.destroy();
 		client.save();
@@ -785,7 +798,7 @@ class Client {
 	clientAttach(socketId: string, token: string) {
 		const client = this;
 
-		if (client.awayMessage && _.size(client.attachedClients) === 0) {
+		if (client.awayMessage && size(client.attachedClients) === 0) {
 			client.networks.forEach(function (network) {
 				// Only remove away on client attachment if
 				// there is no away message on this network
@@ -804,7 +817,7 @@ class Client {
 
 		delete this.attachedClients[socketId];
 
-		if (client.awayMessage && _.size(client.attachedClients) === 0) {
+		if (client.awayMessage && size(client.attachedClients) === 0) {
 			client.networks.forEach(function (network) {
 				// Only set away on client deattachment if
 				// there is no away message on this network
@@ -818,10 +831,10 @@ class Client {
 	// TODO: type session to this.attachedClients
 	registerPushSubscription(session: any, subscription: PushSubscriptionJSON, noSave = false) {
 		if (
-			!_.isPlainObject(subscription) ||
+			!isPlainObject(subscription) ||
 			typeof subscription.endpoint !== "string" ||
 			!/^https?:\/\//.test(subscription.endpoint) ||
-			!_.isPlainObject(subscription.keys) ||
+			!isPlainObject(subscription.keys) ||
 			!subscription.keys || // TS compiler doesn't understand isPlainObject
 			typeof subscription.keys.p256dh !== "string" ||
 			typeof subscription.keys.auth !== "string"
@@ -852,7 +865,7 @@ class Client {
 		this.save();
 	}
 
-	save = _.debounce(
+	save = debounce(
 		function SaveClient(this: Client) {
 			if (Config.values.public) {
 				return;
