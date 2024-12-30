@@ -1,11 +1,8 @@
-import type {Database} from "sqlite3";
-
-import {Channel} from "../../models/channel";
-import {Message} from "../../models/message";
-import {Network} from "../../models/network";
-import Client from "../../client";
-import {SearchQuery, SearchResponse} from "../../../shared/types/storage";
-import type {MessageType} from "../../../shared/types/msg";
+import type {SearchQuery, SearchResponse} from "../../../shared/types/storage.js";
+import type {MessageType} from "../../../shared/types/msg.js";
+import type {Channel} from "../../models/chan.js";
+import type {Message} from "../../models/msg.js";
+import type Network from "../../models/network.js";
 
 export type DeletionRequest = {
 	olderThanDays: number;
