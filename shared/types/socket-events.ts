@@ -1,13 +1,14 @@
-import {SharedMention} from "./mention";
-import {ChanState, SharedChan} from "./chan";
-import {SharedNetwork, SharedServerOptions} from "./network";
-import {SharedMsg, LinkPreview} from "./msg";
-import {SharedUser} from "./user";
-import {SharedChangelogData} from "./changelog";
-import {SharedConfiguration, LockedSharedConfiguration} from "./config";
-import {SearchResponse, SearchQuery} from "./storage";
+import {type SharedMention} from "./mention.js";
+import {ChanState, type SharedChan} from "./chan.js";
+import {type SharedNetwork, type SharedServerOptions} from "./network.js";
+import {type SharedNetworkChan} from "../../shared/types/network.js";
+import {type SharedMsg, type LinkPreview} from "./msg.js";
+import {type SharedUser} from "./user.js";
+import {type SharedChangelogData} from "./changelog.js";
+import {type SharedConfiguration, type LockedSharedConfiguration} from "./config.js";
+import {type SearchResponse, type SearchQuery} from "./storage.js";
 
-type Session = {
+export type Session = {
 	current: boolean;
 	active: number;
 	lastUse: number;
@@ -16,10 +17,10 @@ type Session = {
 	token: string;
 };
 
-type EventHandler<T> = (data: T) => void;
-type NoPayloadEventHandler = EventHandler<void>;
+export type EventHandler<T> = (data: T) => void;
+export type NoPayloadEventHandler = EventHandler<void>;
 
-interface ServerToClientEvents {
+export interface ServerToClientEvents {
 	"auth:start": (serverHash: number) => void;
 	"auth:failed": NoPayloadEventHandler;
 	"auth:success": NoPayloadEventHandler;
@@ -101,7 +102,7 @@ interface ServerToClientEvents {
 	}>;
 }
 
-type AuthPerformData =
+export type AuthPerformData =
 	| Record<string, never> // funny way of saying an empty object
 	| {user: string; password: string}
 	| {
@@ -112,7 +113,7 @@ type AuthPerformData =
 			hasConfig: boolean;
 	  };
 
-interface ClientToServerEvents {
+export interface ClientToServerEvents {
 	"auth:perform": EventHandler<AuthPerformData>;
 
 	changelog: NoPayloadEventHandler;
@@ -174,6 +175,6 @@ interface ClientToServerEvents {
 	search: EventHandler<SearchQuery>;
 }
 
-interface InterServerEvents {}
+export interface InterServerEvents {}
 
-interface SocketData {}
+export interface SocketData {}
