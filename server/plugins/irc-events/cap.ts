@@ -1,7 +1,6 @@
-import {IrcEventHandler} from "../../client";
-
-import Msg from "../../models/msg";
-import STSPolicies from "../sts";
+import {type IrcEventHandler} from "../../client.js";
+import Msg from "../../models/msg.js";
+import STSPolicies from "../sts.js";
 
 export default <IrcEventHandler>function (irc, network) {
 	const client = this;

@@ -1,4 +1,4 @@
-import {IrcEventHandler} from "../../client";
+import {type IrcEventHandler} from "../../client.js";
 
 export default <IrcEventHandler>function (irc, network) {
 	const client = this;

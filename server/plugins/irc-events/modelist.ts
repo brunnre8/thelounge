@@ -1,8 +1,7 @@
-import {IrcEventHandler} from "../../client";
-
-import Msg from "../../models/msg";
-import {MessageType} from "../../../shared/types/msg";
-import {SpecialChanType, ChanType} from "../../../shared/types/chan";
+import {type IrcEventHandler} from "../../client.js";
+import Msg from "../../models/msg.js";
+import {MessageType} from "../../../shared/types/msg.js";
+import {SpecialChanType, ChanType} from "../../../shared/types/chan.js";
 
 export default <IrcEventHandler>function (irc, network) {
 	const client = this;
