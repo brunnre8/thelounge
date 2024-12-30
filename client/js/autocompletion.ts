@@ -1,16 +1,17 @@
-import constants from "./constants";
-
 import Mousetrap from "mousetrap";
-import {Textcomplete, StrategyProps} from "@textcomplete/core";
+import {Textcomplete, type StrategyProps} from "@textcomplete/core";
 import {TextareaEditor} from "@textcomplete/textarea";
-
 import fuzzy from "fuzzy";
-
-import emojiMap from "./helpers/simplemap.json";
-import {store} from "./store";
-import {ChanType} from "../../shared/types/chan";
+import {readFile} from "node:fs/promises";
+import {store} from "./store.js";
+import {ChanType} from "../../shared/types/chan.js";
+import constants from "./constants.js";
 
 export default enableAutocomplete;
+
+const emojiMap = JSON.parse(
+	await readFile(new URL("./helpers/simplemap.json", import.meta.url), {encoding: "utf8"})
+);
 
 const emojiSearchTerms = Object.keys(emojiMap);
 const emojiStrategy: StrategyProps = {
