@@ -1,11 +1,12 @@
 import {has, set} from "lodash-es";
-import log from "../log.js";
 import colors from "chalk";
 import fs from "fs";
-import Helper from "../helper.js";
-import Config from "../config.js";
 import path from "path";
 import {spawn} from "child_process";
+import log from "../log.js";
+import Helper from "../helper.js";
+import Config from "../config.js";
+
 let home: string;
 
 class Utils {

@@ -1,10 +1,11 @@
-import log from "../../log";
 import colors from "chalk";
 import {Command} from "commander";
 import fs from "fs";
-import Helper from "../../helper";
-import Config from "../../config";
-import Utils from "../utils";
+import log from "../../log.js";
+import Helper from "../../helper.js";
+import Config from "../../config.js";
+import Utils from "../utils.js";
+import ClientManager from "../../clientManager.js";
 
 const program = new Command("reset");
 program
@@ -18,8 +19,6 @@ program
 			return;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const ClientManager = require("../../clientManager").default;
 		const users = new ClientManager().getUsers();
 
 		if (users === undefined) {

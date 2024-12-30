@@ -1,19 +1,16 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import log from "../log";
 import colors from "chalk";
 import {Command} from "commander";
-import Config from "../config";
-import Utils from "./utils";
+import fs from "fs";
+import path from "path";
+import log from "../log.js";
+import Config from "../config.js";
+import Utils from "./utils.js";
 
-const program = new Command("upgrade");
-program
+export default new Command("upgrade")
 	.arguments("[packages...]")
 	.description("Upgrade installed themes and packages to their latest versions")
 	.on("--help", Utils.extraHelp)
 	.action(function (packages) {
-		const fs = require("fs");
-		const path = require("path");
-
 		// Get paths to the location of packages directory
 		const packagesConfig = path.join(Config.getPackagesPath(), "package.json");
 		const packagesList = JSON.parse(fs.readFileSync(packagesConfig, "utf-8")).dependencies;
@@ -64,5 +61,3 @@ program
 				process.exit(1);
 			});
 	});
-
-export default program;

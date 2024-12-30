@@ -1,23 +1,19 @@
-import log from "../log";
 import colors from "chalk";
 import fs from "fs";
 import path from "path";
+import log from "../log.js";
 import {Command} from "commander";
-import Config from "../config";
-import Utils from "./utils";
+import Config from "../config.js";
+import Utils from "./utils.js";
+import server from "../server.js";
 
-const program = new Command("start");
-program
+export default new Command("start")
 	.description("Start the server")
 	.option("--dev", "Development mode with hot module reloading")
 	.on("--help", Utils.extraHelp)
-	.action(function (options) {
+	.action(async function (options) {
 		initalizeConfig();
-
-		const newLocal = "../server";
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const server = require(newLocal);
-		server.default(options);
+		await server(options);
 	});
 
 function initalizeConfig() {
@@ -33,5 +29,3 @@ function initalizeConfig() {
 
 	fs.mkdirSync(Config.getUsersPath(), {recursive: true, mode: 0o700});
 }
-
-export default program;

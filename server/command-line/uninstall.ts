@@ -1,20 +1,16 @@
-import log from "../log";
 import colors from "chalk";
 import {Command} from "commander";
-import Config from "../config";
-import Utils from "./utils";
+import fs from "node:fs/promises";
+import path from "path";
+import log from "../log.js";
+import Config from "../config.js";
+import Utils from "./utils.js";
 
-const program = new Command("uninstall");
-program
+export default new Command("uninstall")
 	.argument("<package>", "The package to uninstall")
 	.description("Uninstall a theme or a package")
 	.on("--help", Utils.extraHelp)
 	.action(async function (packageName: string) {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const fs = require("fs").promises;
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const path = require("path");
-
 		const packagesConfig = path.join(Config.getPackagesPath(), "package.json");
 		// const packages = JSON.parse(fs.readFileSync(packagesConfig, "utf-8"));
 		const packages = JSON.parse(await fs.readFile(packagesConfig, "utf-8"));
@@ -38,5 +34,3 @@ program
 			process.exit(1);
 		}
 	});
-
-export default program;

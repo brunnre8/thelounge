@@ -1,14 +1,13 @@
-import log from "../../log";
 import colors from "chalk";
 import {Command} from "commander";
-import Utils from "../utils";
+import log from "../../log.js";
+import Utils from "../utils.js";
+import ClientManager from "../../clientManager.js";
 
-const program = new Command("list");
-program
+export default new Command("list")
 	.description("List all users")
 	.on("--help", Utils.extraHelp)
-	.action(async function () {
-		const ClientManager = (await import("../../clientManager")).default;
+	.action(function () {
 		const users = new ClientManager().getUsers();
 
 		if (users === undefined) {
@@ -30,5 +29,3 @@ program
 			log.info(`${i + 1}. ${colors.bold(user)}`);
 		});
 	});
-
-export default program;
