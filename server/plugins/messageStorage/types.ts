@@ -10,7 +10,7 @@ export type DeletionRequest = {
 	limit: number; // -1 means unlimited
 };
 
-interface MessageStorage {
+export interface MessageStorage {
 	isEnabled: boolean;
 
 	enable(): Promise<void>;
@@ -26,7 +26,7 @@ interface MessageStorage {
 	canProvideMessages(): boolean;
 }
 
-type SearchFunction = (query: SearchQuery) => Promise<SearchResponse>;
+export type SearchFunction = (query: SearchQuery) => Promise<SearchResponse>;
 
 export interface SearchableMessageStorage extends MessageStorage {
 	search: SearchFunction;

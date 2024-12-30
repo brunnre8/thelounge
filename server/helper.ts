@@ -1,8 +1,7 @@
-import pkg from "../package.json";
-import _ from "lodash";
+import {escapeRegExp} from "lodash-es";
 import path from "path";
 import os from "os";
-import fs from "fs";
+import {readFile} from "node:fs/promises";
 import net from "net";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
@@ -12,6 +11,10 @@ export type Hostmask = {
 	ident: string;
 	hostname: string;
 };
+
+const pkg = JSON.parse(
+	await readFile(new URL("../package.json", import.meta.url), {encoding: "utf8"})
+);
 
 const Helper = {
 	expandHome,
@@ -177,7 +180,7 @@ function compareWithWildcard(a: string, b: string) {
 	// so we tokenize and join with the proper char back together,
 	// escaping any other regex modifier
 	const wildmany_split = a.split("*").map((sub) => {
-		const wildone_split = sub.split("?").map((p) => _.escapeRegExp(p));
+		const wildone_split = sub.split("?").map((p) => escapeRegExp(p));
 		return wildone_split.join(".");
 	});
 	const user_regex = wildmany_split.join(".*");

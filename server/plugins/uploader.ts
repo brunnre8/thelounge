@@ -1,5 +1,4 @@
-import Config from "../config";
-import busboy, {BusboyHeaders} from "@fastify/busboy";
+import {type BusboyHeaders, Busboy} from "@fastify/busboy";
 import {v4 as uuidv4} from "uuid";
 import path from "path";
 import fs from "fs";
@@ -7,12 +6,13 @@ import fileType from "file-type";
 import readChunk from "read-chunk";
 import crypto from "crypto";
 import isUtf8 from "is-utf8";
-import log from "../log";
 import contentDisposition from "content-disposition";
 import type {Socket} from "socket.io";
-import {Request, Response} from "express";
+import type {Request, Response} from "express";
+import Config from "../config.js";
+import log from "../log.js";
 
-// Map of allowed mime types to their respecive default filenames
+// Map of allowed mime types to their respective default filenames
 // that will be rendered in browser without forcing them to be downloaded
 const inlineContentDispositionTypes = {
 	"application/ogg": "media.ogx",
@@ -132,7 +132,7 @@ class Uploader {
 	}
 
 	static routeUploadFile(this: void, req: Request, res: Response) {
-		let busboyInstance: NodeJS.WritableStream | busboy | null | undefined;
+		let busboyInstance: NodeJS.WritableStream | Busboy | null | undefined;
 		let uploadUrl: string | URL;
 		let randomName: string;
 		let destDir: fs.PathLike;
@@ -191,7 +191,7 @@ class Uploader {
 		// create a new busboy processor, it is wrapped in try/catch
 		// because it can throw on malformed headers
 		try {
-			busboyInstance = new busboy({
+			busboyInstance = new Busboy({
 				headers: req.headers as BusboyHeaders,
 				limits: {
 					files: 1, // only allow one file per upload

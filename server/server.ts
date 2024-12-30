@@ -40,6 +40,8 @@ import type {
 	LockedConfigNetDefaults,
 } from "../shared/types/config.js";
 
+import storage from "./plugins/storage.js";
+
 type ServerOptions = {
 	dev: boolean;
 };
@@ -84,7 +86,7 @@ export default async function (
 	const app = express();
 
 	if (options.dev) {
-		(await import("./plugins/dev-server")).default(app);
+		(await import("./plugins/dev-server.js")).default(app);
 	}
 
 	app.set("env", "production")
@@ -286,7 +288,7 @@ export default async function (
 			if (Config.values.prefetchStorage) {
 				log.info("Clearing prefetch storage folder, this might take a while...");
 
-				(await import("./plugins/storage")).default.emptyDir();
+				storage.emptyDir();
 			}
 
 			// Forcefully exit after 3 seconds
@@ -309,13 +311,7 @@ export default async function (
 
 		// Clear storage folder after server starts successfully
 		if (Config.values.prefetchStorage) {
-			import("./plugins/storage")
-				.then(({default: storage}) => {
-					storage.emptyDir();
-				})
-				.catch((err: Error) => {
-					log.error(`Could not clear storage folder, ${err.message}`);
-				});
+			storage.emptyDir();
 		}
 
 		changelog.checkForUpdates(manager);

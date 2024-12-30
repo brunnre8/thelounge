@@ -1,10 +1,12 @@
 import {throttle} from "lodash-es";
+import {readFile} from "node:fs/promises";
 import {type IrcEventHandler} from "../../client.js";
 import Helper from "../../helper.js";
 import Msg from "../../models/msg.js";
 import User from "../../models/user.js";
 import {MessageType} from "../../../shared/types/msg.js";
-import pkg from "../../../package.json";
+
+const pkg = JSON.parse(await readFile("./package.json", "utf8"));
 
 const ctcpResponses = {
 	CLIENTINFO: () =>

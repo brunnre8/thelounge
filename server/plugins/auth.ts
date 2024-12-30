@@ -1,7 +1,9 @@
 import colors from "chalk";
-import Client from "../client";
-import ClientManager from "../clientManager";
-import log from "../log";
+import Client from "../client.js";
+import ClientManager from "../clientManager.js";
+import log from "../log.js";
+import authLdap from "./auth/ldap.js";
+import authLocal from "./auth/local.js";
 
 export type AuthHandler = (
 	manager: ClientManager,
@@ -13,7 +15,7 @@ export type AuthHandler = (
 
 // The order defines priority: the first available plugin is used.
 // Always keep 'local' auth plugin at the end of the list; it should always be enabled.
-const plugins = [import("./auth/ldap"), import("./auth/local")];
+const plugins = [authLdap, authLocal];
 
 const toExport = {
 	moduleName: "<module with no name>",
@@ -34,10 +36,7 @@ const toExport = {
 			return;
 		}
 
-		// Override default API stubs with exports from first enabled plugin found
-		const resolvedPlugins = await Promise.all(plugins);
-
-		for (const {default: plugin} of resolvedPlugins) {
+		for (const plugin of plugins) {
 			if (plugin.isEnabled()) {
 				toExport.initialized = true;
 
