@@ -1,10 +1,10 @@
-import log from "../../log";
 import {Command} from "commander";
 import child from "child_process";
 import colors from "chalk";
 import fs from "fs";
-import Config from "../../config";
-import Utils from "../utils";
+import log from "../../log.js";
+import Config from "../../config.js";
+import Utils from "../utils.js";
 
 const program = new Command("edit");
 program

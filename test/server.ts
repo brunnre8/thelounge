@@ -1,13 +1,12 @@
-import log from "../server/log";
-import Config from "../server/config";
 import {expect} from "chai";
 import got from "got";
 import io from "socket.io-client";
-import util from "./util";
-import changelog from "../server/plugins/changelog";
-
 import sinon from "ts-sinon";
-import ClientManager from "../server/clientManager";
+import log from "../server/log.js";
+import Config from "../server/config.js";
+import util from "./util.js";
+import changelog from "../server/plugins/changelog.js";
+import ClientManager from "../server/clientManager.js";
 
 describe("Server", function () {
 	// Increase timeout due to unpredictable I/O on CI services

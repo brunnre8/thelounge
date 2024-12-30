@@ -1,4 +1,4 @@
-import {PluginInputHandler} from "./index";
+import {type PluginInputHandler} from "./index.js";
 
 const commands = ["list"];
 
