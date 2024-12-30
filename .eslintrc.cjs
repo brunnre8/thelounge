@@ -125,7 +125,8 @@ const tsTestRulesTemp = defineConfig({
 module.exports = defineConfig({
 	root: true,
 	parserOptions: {
-		ecmaVersion: 2022,
+		ecmaVersion: 2023,
+		sourceType: "module",
 	},
 	overrides: [
 		{
