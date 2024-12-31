@@ -38,34 +38,7 @@ import {type SearchQuery, type SearchResponse} from "../shared/types/storage.js"
 import {type SharedChan, ChanType} from "../shared/types/chan.js";
 import {type SharedNetwork} from "../shared/types/network.js";
 import {type ServerToClientEvents} from "../shared/types/socket-events.js";
-
-const events = [
-	"away",
-	"cap",
-	"connection",
-	"unhandled",
-	"ctcp",
-	"chghost",
-	"error",
-	"help",
-	"info",
-	"invite",
-	"join",
-	"kick",
-	"list",
-	"mode",
-	"modelist",
-	"motd",
-	"message",
-	"names",
-	"nick",
-	"part",
-	"quit",
-	"sasl",
-	"topic",
-	"welcome",
-	"whois",
-];
+import {register as registerIrcEvents} from "./plugins/irc-events/index.js";
 
 type ClientPushSubscription = {
 	endpoint: string;
@@ -98,7 +71,7 @@ export type UserConfig = {
 	networks?: NetworkConfig[];
 };
 
-class Client {
+export class Client {
 	awayMessage!: string;
 	lastActiveChannel!: number;
 	attachedClients!: {
@@ -368,16 +341,11 @@ class Client {
 			return;
 		}
 
-		(network as NetworkWithIrcFramework).createIrcFramework(client);
+		// TODO: completely broken type
+		const networkWithIrc = network as NetworkWithIrcFramework;
+		networkWithIrc.createIrcFramework(client);
 
-		// TODO
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		events.forEach(async (plugin) => {
-			(await import(`./plugins/irc-events/${plugin}`)).default.apply(client, [
-				network.irc,
-				network,
-			]);
-		});
+		registerIrcEvents(client, networkWithIrc.irc, networkWithIrc);
 
 		if (network.userDisconnected) {
 			network.getLobby().pushMessage(
