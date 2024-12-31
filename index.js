@@ -2,7 +2,7 @@
 
 "use strict";
 
-process.chdir(__dirname);
+process.chdir(import.meta.dirname);
 
 import fs from "fs";
 import {readFile} from "node:fs/promises";

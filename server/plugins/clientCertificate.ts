@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
-import {md, pki} from "node-forge";
+import forge from "node-forge";
 import log from "../log.js";
 import Config from "../config.js";
 
@@ -81,8 +81,8 @@ function generateAndWrite(folderPath: string, paths: {privateKeyPath: any; certi
 }
 
 function generate() {
-	const keys = pki.rsa.generateKeyPair(2048);
-	const cert = pki.createCertificate();
+	const keys = forge.pki.rsa.generateKeyPair(2048);
+	const cert = forge.pki.createCertificate();
 
 	cert.publicKey = keys.publicKey;
 	cert.serialNumber = crypto.randomBytes(16).toString("hex").toUpperCase();
@@ -119,11 +119,11 @@ function generate() {
 	]);
 
 	// Sign this certificate with a SHA256 signature
-	cert.sign(keys.privateKey, md.sha256.create());
+	cert.sign(keys.privateKey, forge.md.sha256.create());
 
 	const pem: ClientCertificateType = {
-		private_key: pki.privateKeyToPem(keys.privateKey),
-		certificate: pki.certificateToPem(cert),
+		private_key: forge.pki.privateKeyToPem(keys.privateKey),
+		certificate: forge.pki.certificateToPem(cert),
 	};
 
 	return pem;

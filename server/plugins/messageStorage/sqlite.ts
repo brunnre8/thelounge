@@ -15,7 +15,7 @@ import type {SearchQuery, SearchResponse} from "../../../shared/types/storage.js
 let sqlite3: any;
 
 try {
-	sqlite3 = require("sqlite3");
+	sqlite3 = await import("sqlite3");
 } catch (e: any) {
 	Config.values.messageStorage = Config.values.messageStorage.filter((item) => item !== "sqlite");
 

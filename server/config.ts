@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import path from "path";
 import fs, {Stats} from "fs";
 import os from "os";
@@ -9,7 +8,8 @@ import {type SearchOptions} from "ldapjs";
 import log from "./log.js";
 import Helper from "./helper.js";
 import Utils from "./command-line/utils.js";
-import Network from "./models/network.js";
+import type Network from "./models/network.js";
+import defaultconfig from "../defaults/config.cjs";
 
 // TODO: Type this
 export type WebIRC = {
@@ -70,8 +70,6 @@ type Ldap = {
 	baseDN?: string;
 };
 
-type TlsOptions = any;
-
 type Debug = {
 	ircFramework: boolean;
 	raw: boolean;
@@ -115,9 +113,7 @@ export type ConfigType = {
 };
 
 class Config {
-	values = require(path.resolve(
-		path.join(__dirname, "..", "defaults", "config.js")
-	)) as ConfigType;
+	values: ConfigType = defaultconfig as any;
 	#homePath = "";
 
 	getHomePath() {
@@ -206,14 +202,14 @@ class Config {
 		});
 	}
 
-	setHome(newPath: string) {
+	async setHome(newPath: string) {
 		this.#homePath = Helper.expandHome(newPath);
 
 		// Reload config from new home location
 		const configPath = this.getConfigPath();
 
 		if (fs.existsSync(configPath)) {
-			const userConfig = require(configPath);
+			const userConfig = await import(configPath);
 
 			if (isEmpty(userConfig)) {
 				log.warn(
