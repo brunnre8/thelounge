@@ -5,6 +5,7 @@ import fs from "fs";
 import log from "../../log.js";
 import Config from "../../config.js";
 import Utils from "../utils.js";
+import ClientManager from "../../clientManager.js";
 
 const program = new Command("edit");
 program
@@ -17,8 +18,6 @@ program
 			return;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const ClientManager = require("../../clientManager").default;
 		const users = new ClientManager().getUsers();
 
 		if (users === undefined) {
