@@ -105,7 +105,7 @@ const builtInInputs: BuiltinInput[] = [
 ];
 
 for (const input of builtInInputs) {
-	// TODO: horrifying type case, again due to breakage in NetworkWithIrcFramework
+	// TODO: horrifying type cast, again due to breakage in NetworkWithIrcFramework
 	input.commands.forEach((command: string) => userInputs.set(command, input as Plugin));
 }
 
