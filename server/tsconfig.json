@@ -3,7 +3,7 @@
   "include": [".", "../shared/"],
   "files": [
     "../babel.config.cjs",
-    "../defaults/config.js",
+    "../defaults/config.cjs",
     "../package.json",
     "../webpack.config.ts"
   ],
