@@ -1,5 +1,5 @@
 /** @type {import('@volar-plugins/prettier')} */
-const {volarPrettierPlugin} = require("@volar-plugins/prettier");
+import {volarPrettierPlugin} from "@volar-plugins/prettier";
 
 module.exports = {
 	plugins: [
