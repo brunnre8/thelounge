@@ -113,7 +113,7 @@ function getPersistentStorageDir(packageName: string) {
 	return dir;
 }
 
-function loadPackage(packageName: string) {
+async function loadPackage(packageName: string) {
 	let packageInfo: PackageInfo;
 	// TODO: type
 	let packageFile: Package;
@@ -136,7 +136,7 @@ function loadPackage(packageName: string) {
 			throw `v${packageInfo.version} does not support this version of The Lounge. Supports: ${packageInfo.thelounge.supports}`;
 		}
 
-		packageFile = require(packagePath);
+		packageFile = await import(packagePath);
 	} catch (e: any) {
 		log.error(`Package ${colors.bold(packageName)} could not be loaded: ${colors.red(e)}`);
 
@@ -181,11 +181,11 @@ function loadPackage(packageName: string) {
 	}
 }
 
-function loadPackages() {
+async function loadPackages() {
 	const packageJson = path.join(Config.getPackagesPath(), "package.json");
 	const packages = getEnabledPackages(packageJson);
 
-	packages.forEach(loadPackage);
+	await Promise.all(packages.map(loadPackage));
 
 	watchPackages(packageJson);
 }
@@ -205,7 +205,10 @@ function watchPackages(packageJson: string) {
 						continue;
 					}
 
-					loadPackage(packageName);
+					// error shouldn't trigger, we catch them in the loadPackage function but you know...
+					loadPackage(packageName).catch((e) =>
+						log.error(`watchpackages couldn't load ${packageName}`, e)
+					);
 				}
 			},
 			1000,

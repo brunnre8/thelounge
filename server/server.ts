@@ -243,7 +243,7 @@ export default async function (
 		});
 
 		manager = new ClientManager();
-		packages.loadPackages();
+		packages.loadPackages().catch((e) => log.error("could not load packages", e));
 
 		const defaultTheme = themes.getByName(Config.values.theme);
 
