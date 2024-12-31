@@ -1,20 +1,16 @@
 import {escapeRegExp} from "lodash-es";
 import path from "path";
 import os from "os";
-import {readFile} from "node:fs/promises";
 import net from "net";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import pkg from "../package.json" with {type: "json"}
 
 export type Hostmask = {
 	nick: string;
 	ident: string;
 	hostname: string;
 };
-
-const pkg = JSON.parse(
-	await readFile(new URL("../package.json", import.meta.url), {encoding: "utf8"})
-);
 
 const Helper = {
 	expandHome,

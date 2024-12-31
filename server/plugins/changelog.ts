@@ -4,7 +4,7 @@ import log from "../log.js";
 import ClientManager from "../clientManager.js";
 import Config from "../config.js";
 import {type SharedChangelogData} from "../../shared/types/changelog.js";
-import {readFile} from "node:fs/promises";
+import pkg from "../../package.json" with {type: "json"}
 
 const TIME_TO_LIVE = 15 * 60 * 1000; // 15 minutes, in milliseconds
 
@@ -13,9 +13,7 @@ export default {
 	fetch,
 	checkForUpdates,
 };
-const pkg = JSON.parse(
-	await readFile(new URL("../../package.json", import.meta.url), {encoding: "utf8"})
-);
+
 const versions: SharedChangelogData = {
 	current: {
 		prerelease: false,
