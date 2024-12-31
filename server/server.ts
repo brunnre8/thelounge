@@ -7,6 +7,8 @@ import {Server as ioServer, Socket as ioSocket} from "socket.io";
 import dns from "dns";
 import colors from "chalk";
 import net from "net";
+import http from "http";
+import https from "https";
 
 import log from "./log.js";
 import Client from "./client.js";
@@ -138,11 +140,10 @@ export default async function (
 		);
 	}
 
-	let server: import("http").Server | import("https").Server;
+	let server: http.Server | https.Server;
 
 	if (!Config.values.https.enable) {
-		const createServer = (await import("http")).createServer;
-		server = createServer(app);
+		server = http.createServer(app);
 	} else {
 		const keyPath = Helper.expandHome(Config.values.https.key);
 		const certPath = Helper.expandHome(Config.values.https.certificate);
@@ -163,8 +164,7 @@ export default async function (
 			process.exit(1);
 		}
 
-		const createServer = (await import("https")).createServer;
-		server = createServer(
+		server = https.createServer(
 			{
 				key: fs.readFileSync(keyPath),
 				cert: fs.readFileSync(certPath),
