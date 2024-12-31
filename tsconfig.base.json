@@ -2,7 +2,7 @@
   "compilerOptions": {
     "composite": true /* Enable constraints that allow a TypeScript project to be used with project references. */,
     "target": "esnext",
-    "module": "node16",
+    "module": "nodenext",
     "rootDir": "./",
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true /* Enable importing .json files */,
