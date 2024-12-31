@@ -11,11 +11,11 @@ import type {SearchableMessageStorage, DeletionRequest} from "./types.js";
 import Network from "../../models/network.js";
 import type {SearchQuery, SearchResponse} from "../../../shared/types/storage.js";
 
-// TODO; type
-let sqlite3: any;
+let sqlite3: typeof import("sqlite3") | null = null;
 
 try {
-	sqlite3 = await import("sqlite3");
+	// need to destructure the import manually... dynamic imports don't do the automatic default transformation
+	({default: sqlite3} = await import("sqlite3"));
 } catch (e: any) {
 	Config.values.messageStorage = Config.values.messageStorage.filter((item) => item !== "sqlite");
 
@@ -127,6 +127,10 @@ class SqliteMessageStorage implements SearchableMessageStorage {
 	}
 
 	async _enable(connection_string: string) {
+		if (!sqlite3) {
+			return;
+		}
+
 		this.database = new sqlite3.Database(connection_string);
 
 		try {
@@ -141,6 +145,11 @@ class SqliteMessageStorage implements SearchableMessageStorage {
 	}
 
 	async enable() {
+		if (sqlite3 === null) {
+			this.initDone.resolve();
+			return;
+		}
+
 		const logsPath = Config.getUserLogsPath();
 		const sqlitePath = path.join(logsPath, `${this.userName}.sqlite3`);
 
