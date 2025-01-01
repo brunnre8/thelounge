@@ -8,11 +8,14 @@ import pkg from "../../package.json" with {type: "json"}
 
 const TIME_TO_LIVE = 15 * 60 * 1000; // 15 minutes, in milliseconds
 
-export default {
+// TODO: we really should just make isUpdateAvailable a function
+// and hide the internals
+const changelogState = {
 	isUpdateAvailable: false,
 	fetch,
 	checkForUpdates,
 };
+export default changelogState
 
 const versions: SharedChangelogData = {
 	current: {
@@ -85,7 +88,7 @@ function updateVersions(response: Response<string>) {
 
 			// Find latest release or pre-release if current version is also a pre-release
 			if (!release.prerelease || release.prerelease === prerelease) {
-				module.exports.isUpdateAvailable = true;
+				changelogState.isUpdateAvailable = true;
 
 				versions.latest = {
 					prerelease: release.prerelease,
@@ -102,7 +105,7 @@ function updateVersions(response: Response<string>) {
 function checkForUpdates(manager: ClientManager) {
 	fetch()
 		.then((versionData) => {
-			if (!module.exports.isUpdateAvailable) {
+			if (!changelogState.isUpdateAvailable) {
 				// Check for updates every 24 hours + random jitter of <3 hours
 				setTimeout(
 					() => checkForUpdates(manager),
