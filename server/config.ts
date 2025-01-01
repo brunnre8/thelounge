@@ -209,7 +209,8 @@ class Config {
 		const configPath = this.getConfigPath();
 
 		if (fs.existsSync(configPath)) {
-			const userConfig = await import(configPath);
+			// synthetic default key comes from the CJS compat import
+			const userConfig = (await import(configPath)).default;
 
 			if (isEmpty(userConfig)) {
 				log.warn(
