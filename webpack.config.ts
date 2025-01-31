@@ -112,7 +112,7 @@ const config: webpack.Configuration = {
 	plugins: [
 		tsCheckerPlugin,
 		vueLoaderPlugin,
-		new webpack.DefinePlugin({
+		new webpack.default.DefinePlugin({
 			__VUE_PROD_DEVTOOLS__: false,
 			__VUE_OPTIONS_API__: false,
 		}),
@@ -171,7 +171,7 @@ const config: webpack.Configuration = {
 			],
 		}),
 		// socket.io uses debug, we don't need it
-		new webpack.NormalModuleReplacementPlugin(
+		new webpack.default.NormalModuleReplacementPlugin(
 			/debug/,
 			path.resolve(__dirname, "scripts/noop.js")
 		),
@@ -206,7 +206,7 @@ export default (env: any, argv: any) => {
 			vueLoaderPlugin,
 			miniCssExtractPlugin,
 			// Client tests that require Vue may end up requireing socket.io
-			new webpack.NormalModuleReplacementPlugin(
+			new webpack.default.NormalModuleReplacementPlugin(
 				/js(\/|\\)socket\.js/,
 				path.resolve(__dirname, "scripts/noop.js")
 			),
