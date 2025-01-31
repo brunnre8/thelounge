@@ -24,17 +24,18 @@ const miniCssExtractPlugin = new MiniCssExtractPlugin({
 });
 
 const isProduction = process.env.NODE_ENV === "production";
+const __dirname: string = (import.meta as any).dirname;
 const config: webpack.Configuration = {
 	mode: isProduction ? "production" : "development",
 	entry: {
 		// TODO: fixme once import.meta.dirname is in the type files
-		"js/bundle.js": [path.resolve((import.meta as any).dirname, "client/js/vue.ts")],
+		"js/bundle.js": path.resolve(__dirname, "client/js/vue.ts"),
 	},
 	devtool: "source-map",
 	output: {
 		clean: true, // Clean the output directory before emit.
 		// TODO: fixme once import.meta.dirname is in the type files
-		path: path.resolve((import.meta as any).dirname, "public"),
+		path: path.resolve(__dirname, "public"),
 		filename: "[name]",
 		publicPath: "/",
 	},
