@@ -9,7 +9,7 @@
 <script lang="ts">
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
-import {computed, defineComponent, onBeforeUnmount, onMounted, PropType} from "vue";
+import {computed, defineComponent, onBeforeUnmount, onMounted, type PropType} from "vue";
 import eventbus from "../js/eventbus";
 import type {ClientMessage} from "../js/types";
 

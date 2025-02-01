@@ -7,7 +7,7 @@ import {defineComponent, ref} from "vue";
 
 import socket from "../../js/socket";
 import {useStore} from "../../js/store";
-import NetworkForm, {NetworkFormDefaults} from "../NetworkForm.vue";
+import NetworkForm, {type NetworkFormDefaults} from "../NetworkForm.vue";
 
 export default defineComponent({
 	name: "Connect",

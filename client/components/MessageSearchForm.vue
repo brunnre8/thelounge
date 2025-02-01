@@ -81,10 +81,10 @@ form.message-search.opened .input-wrapper {
 </style>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted, PropType, ref, watch} from "vue";
+import {computed, defineComponent, onMounted, type PropType, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import eventbus from "../js/eventbus";
-import {ClientNetwork, ClientChan} from "../js/types";
+import type {ClientNetwork, ClientChan} from "../js/types";
 
 export default defineComponent({
 	name: "MessageSearchForm",

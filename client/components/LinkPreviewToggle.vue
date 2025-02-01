@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, PropType} from "vue";
-import {ClientMessage, ClientLinkPreview} from "../js/types";
+import {computed, defineComponent, type PropType} from "vue";
+import type {ClientMessage, ClientLinkPreview} from "../js/types";
 
 export default defineComponent({
 	name: "LinkPreviewToggle",

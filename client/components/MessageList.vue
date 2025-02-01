@@ -60,7 +60,7 @@
 <script lang="ts">
 import {condensedTypes} from "../../shared/irc";
 import {ChanType} from "../../shared/types/chan";
-import {MessageType, SharedMsg} from "../../shared/types/msg";
+import {MessageType, type SharedMsg} from "../../shared/types/msg";
 import eventbus from "../js/eventbus";
 import clipboard from "../js/clipboard";
 import socket from "../js/socket";
@@ -75,12 +75,12 @@ import {
 	onBeforeUpdate,
 	onMounted,
 	onUnmounted,
-	PropType,
+	type PropType,
 	ref,
 	watch,
 } from "vue";
 import {useStore} from "../js/store";
-import {ClientChan, ClientMessage, ClientNetwork, ClientLinkPreview} from "../js/types";
+import type {ClientChan, ClientMessage, ClientNetwork, ClientLinkPreview} from "../js/types";
 
 type CondensedMessageContainer = {
 	type: "condensed";

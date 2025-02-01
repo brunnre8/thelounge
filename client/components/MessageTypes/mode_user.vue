@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
-import {ClientNetwork, ClientMessage} from "../../js/types";
+import {defineComponent, type PropType} from "vue";
+import type {ClientNetwork, ClientMessage} from "../../js/types";
 
 export default defineComponent({
 	name: "MessageChannelMode",

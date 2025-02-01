@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import ParsedMessage from "../ParsedMessage.vue";
-import {computed, defineComponent, PropType} from "vue";
-import {ClientNetwork, ClientMessage} from "../../js/types";
+import {computed, defineComponent, type PropType} from "vue";
+import type {ClientNetwork, ClientMessage} from "../../js/types";
 
 export default defineComponent({
 	name: "MessageTypeError",

@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
-import {ClientChan, ClientNetwork} from "../../js/types";
+import {defineComponent, type PropType} from "vue";
+import type {ClientChan, ClientNetwork} from "../../js/types";
 import ParsedMessage from "../ParsedMessage.vue";
 
 export default defineComponent({

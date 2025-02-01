@@ -440,9 +440,9 @@ the server tab on new connection"
 <script lang="ts">
 import RevealPassword from "./RevealPassword.vue";
 import SidebarToggle from "./SidebarToggle.vue";
-import {defineComponent, nextTick, PropType, ref, watch} from "vue";
+import {defineComponent, nextTick, type PropType, ref, watch} from "vue";
 import {useStore} from "../js/store";
-import {ClientNetwork} from "../js/types";
+import type {ClientNetwork} from "../js/types";
 
 export type NetworkFormDefaults = Partial<ClientNetwork> & {
 	join?: string;

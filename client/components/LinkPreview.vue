@@ -138,7 +138,7 @@ import {
 	onBeforeUnmount,
 	onMounted,
 	onUnmounted,
-	PropType,
+	type PropType,
 	ref,
 	watch,
 } from "vue";

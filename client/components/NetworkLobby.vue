@@ -46,12 +46,12 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, PropType} from "vue";
+import {computed, defineComponent, type PropType} from "vue";
 import collapseNetwork from "../js/helpers/collapseNetwork";
 import roundBadgeNumber from "../js/helpers/roundBadgeNumber";
 import ChannelWrapper from "./ChannelWrapper.vue";
 
-import type {ClientChan, ClientNetwork} from "../js/types";
+import type {ClientNetwork} from "../js/types";
 
 export default defineComponent({
 	name: "Channel",

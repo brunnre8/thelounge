@@ -154,7 +154,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {computed, watch, defineComponent, ref, onMounted, onUnmounted} from "vue";
 import {useStore} from "../js/store";
-import {ClientMention} from "../js/types";
+import type {ClientMention} from "../js/types";
 
 dayjs.extend(relativeTime);
 

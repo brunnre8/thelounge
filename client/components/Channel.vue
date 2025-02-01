@@ -29,10 +29,10 @@
 </template>
 
 <script lang="ts">
-import {PropType, defineComponent, computed} from "vue";
+import {type PropType, defineComponent, computed} from "vue";
 import roundBadgeNumber from "../js/helpers/roundBadgeNumber";
 import useCloseChannel from "../js/hooks/use-close-channel";
-import {ClientChan, ClientNetwork} from "../js/types";
+import type {ClientChan, ClientNetwork} from "../js/types";
 import ChannelWrapper from "./ChannelWrapper.vue";
 
 export default defineComponent({

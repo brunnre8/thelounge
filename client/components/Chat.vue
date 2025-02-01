@@ -133,7 +133,16 @@ import ListBans from "./Special/ListBans.vue";
 import ListInvites from "./Special/ListInvites.vue";
 import ListChannels from "./Special/ListChannels.vue";
 import ListIgnored from "./Special/ListIgnored.vue";
-import {defineComponent, PropType, ref, computed, watch, nextTick, onMounted, Component} from "vue";
+import {
+	defineComponent,
+	type PropType,
+	ref,
+	computed,
+	watch,
+	nextTick,
+	onMounted,
+	type Component,
+} from "vue";
 import type {ClientNetwork, ClientChan} from "../js/types";
 import {useStore} from "../js/store";
 import {SpecialChanType, ChanType} from "../../shared/types/chan";

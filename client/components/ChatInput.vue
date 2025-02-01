@@ -60,7 +60,7 @@ import {commands} from "../js/commands/index";
 import socket from "../js/socket";
 import upload from "../js/upload";
 import eventbus from "../js/eventbus";
-import {watch, defineComponent, nextTick, onMounted, PropType, ref, onUnmounted} from "vue";
+import {watch, defineComponent, nextTick, onMounted, type PropType, ref, onUnmounted} from "vue";
 import type {ClientNetwork, ClientChan} from "../js/types";
 import {useStore} from "../js/store";
 import {ChanType} from "../../shared/types/chan";

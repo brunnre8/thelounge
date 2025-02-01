@@ -218,7 +218,7 @@ import collapseNetworkHelper from "../js/helpers/collapseNetwork";
 import isIgnoredKeybind from "../js/helpers/isIgnoredKeybind";
 import distance from "../js/helpers/distance";
 import eventbus from "../js/eventbus";
-import {ClientChan, NetChan} from "../js/types";
+import type {ClientChan, NetChan} from "../js/types";
 import {useStore} from "../js/store";
 import {switchToChannel} from "../js/router";
 import Sortable from "sortablejs";

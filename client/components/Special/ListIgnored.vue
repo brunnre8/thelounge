@@ -18,8 +18,8 @@
 <script lang="ts">
 import ParsedMessage from "../ParsedMessage.vue";
 import localetime from "../../js/helpers/localetime";
-import {defineComponent, PropType} from "vue";
-import {ClientNetwork, ClientChan} from "../../js/types";
+import {defineComponent, type PropType} from "vue";
+import type {ClientNetwork, ClientChan} from "../../js/types";
 
 export default defineComponent({
 	name: "ListIgnored",

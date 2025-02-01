@@ -94,7 +94,7 @@
 <script lang="ts">
 import {computed, defineComponent, onMounted, ref} from "vue";
 import {useStore} from "../../js/store";
-import {BeforeInstallPromptEvent} from "../../js/types";
+import type {BeforeInstallPromptEvent} from "../../js/types";
 
 let installPromptEvent: BeforeInstallPromptEvent | null = null;
 

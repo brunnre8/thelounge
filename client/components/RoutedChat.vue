@@ -12,7 +12,7 @@
 import {watch, computed, defineComponent, onMounted} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "../js/store";
-import {ClientChan} from "../js/types";
+import type {ClientChan} from "../js/types";
 
 // Temporary component for routing channels and lobbies
 import Chat from "./Chat.vue";

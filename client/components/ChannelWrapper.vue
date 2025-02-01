@@ -35,8 +35,8 @@
 <script lang="ts">
 import eventbus from "../js/eventbus";
 import isChannelCollapsed from "../js/helpers/isChannelCollapsed";
-import {ClientNetwork, ClientChan} from "../js/types";
-import {computed, defineComponent, PropType} from "vue";
+import type {ClientNetwork, ClientChan} from "../js/types";
+import {computed, defineComponent, type PropType} from "vue";
 import {useStore} from "../js/store";
 import {switchToChannel} from "../js/router";
 

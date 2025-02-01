@@ -36,11 +36,11 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, ref} from "vue";
+import {defineComponent, type PropType, ref} from "vue";
 import {switchToChannel} from "../js/router";
 import socket from "../js/socket";
 import {useStore} from "../js/store";
-import {ClientNetwork, ClientChan} from "../js/types";
+import type {ClientNetwork, ClientChan} from "../js/types";
 
 export default defineComponent({
 	name: "JoinChannel",

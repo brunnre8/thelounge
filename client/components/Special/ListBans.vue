@@ -20,7 +20,7 @@
 <script lang="ts">
 import ParsedMessage from "../ParsedMessage.vue";
 import localeTime from "../../js/helpers/localetime";
-import {defineComponent, PropType} from "vue";
+import {defineComponent, type PropType} from "vue";
 import type {ClientNetwork, ClientChan} from "../../js/types";
 
 export default defineComponent({

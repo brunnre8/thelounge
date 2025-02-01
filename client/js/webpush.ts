@@ -1,5 +1,5 @@
-import socket from "./socket";
-import {store} from "./store";
+import socket from "./socket.js";
+import {store} from "./store.js";
 
 export default {togglePushSubscription};
 

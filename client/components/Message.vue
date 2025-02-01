@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, PropType} from "vue";
+import {computed, defineComponent, type PropType} from "vue";
 import dayjs from "dayjs";
 
 import constants from "../js/constants";
