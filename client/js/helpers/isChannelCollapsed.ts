@@ -1,4 +1,4 @@
-import {store} from "../store";
+import {store} from "../store.js";
 
 export default (network, channel) => {
 	if (!network.isCollapsed || channel.highlight || channel.type === "lobby") {

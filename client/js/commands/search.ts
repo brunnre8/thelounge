@@ -1,5 +1,5 @@
-import {store} from "../store";
-import {router} from "../router";
+import {store} from "../store.js";
+import {router} from "../router.js";
 
 export function input(args: string[]): boolean {
 	if (!store.state.settings.searchEnabled) {

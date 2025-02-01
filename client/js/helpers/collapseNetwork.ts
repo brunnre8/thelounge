@@ -1,4 +1,4 @@
-import storage from "../localStorage";
+import storage from "../localStorage.js";
 
 export default (network, isCollapsed) => {
 	const stored = storage.get("thelounge.networks.collapsed");

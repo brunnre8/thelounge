@@ -1,5 +1,5 @@
-import socket from "../socket";
-import {store} from "../store";
+import socket from "../socket.js";
+import {store} from "../store.js";
 
 socket.on("msg:preview", function (data) {
 	const netChan = store.getters.findChannel(data.chan);

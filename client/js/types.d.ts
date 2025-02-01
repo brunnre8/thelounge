@@ -1,11 +1,11 @@
 import {defineComponent} from "vue";
 
-import {SharedChan} from "../../shared/types/chan";
-import {SharedNetwork} from "../../shared/types/network";
-import {SharedUser} from "../../shared/types/user";
-import {SharedMention} from "../../shared/types/mention";
-import {SharedConfiguration, LockedSharedConfiguration} from "../../shared/types/config";
-import {LinkPreview, SharedMsg} from "../../shared/types/msg";
+import {SharedChan} from "../../shared/types/chan.js";
+import {SharedNetwork} from "../../shared/types/network.js";
+import {SharedUser} from "../../shared/types/user.js";
+import {SharedMention} from "../../shared/types/mention.js";
+import {SharedConfiguration, LockedSharedConfiguration} from "../../shared/types/config.js";
+import {LinkPreview, SharedMsg} from "../../shared/types/msg.js";
 
 interface LoungeWindow extends Window {
 	g_TheLoungeRemoveLoading?: () => void;

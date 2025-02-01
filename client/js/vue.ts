@@ -1,18 +1,17 @@
-import constants from "./constants";
-
-import "../css/style.css";
 import {createApp} from "vue";
-import {store, CallableGetters, key} from "./store";
-import App from "../components/App.vue";
-import storage from "./localStorage";
-import {router} from "./router";
-import socket from "./socket";
-import "./socket-events"; // this sets up all socket event listeners, do not remove
-import eventbus from "./eventbus";
 
-import "./webpush";
-import "./keybinds";
-import {LoungeWindow} from "./types";
+import constants from "./constants.js";
+import "../css/style.css";
+import {store, type CallableGetters, key} from "./store.js";
+import App from "../components/App.vue";
+import storage from "./localStorage.js";
+import {router} from "./router.js";
+import socket from "./socket.js";
+import "./socket-events.js"; // this sets up all socket event listeners, do not remove
+import eventbus from "./eventbus.js";
+import "./webpush.js";
+import "./keybinds.js";
+import type {LoungeWindow} from "./types.js";
 
 const favicon = document.getElementById("favicon");
 const faviconNormal = favicon?.getAttribute("href") || "";
@@ -21,7 +20,8 @@ const faviconAlerted = favicon?.dataset.other || "";
 export const VueApp = createApp(App);
 
 VueApp.use(router);
-VueApp.use(store, key);
+// @ts-ignore
+VueApp.use(store, key); // TODO: Fix missing install in type
 
 VueApp.mount("#app");
 socket.open();

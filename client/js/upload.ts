@@ -1,7 +1,7 @@
 import {update as updateCursor} from "undate";
 
-import socket from "./socket";
-import {store} from "./store";
+import socket from "./socket.js";
+import {store} from "./store.js";
 
 class Uploader {
 	xhr: XMLHttpRequest | null = null;

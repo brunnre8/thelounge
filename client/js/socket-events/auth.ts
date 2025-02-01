@@ -1,8 +1,8 @@
-import socket from "../socket";
-import storage from "../localStorage";
-import {router, navigate} from "../router";
-import {store} from "../store";
-import location from "../location";
+import socket from "../socket.js";
+import storage from "../localStorage.js";
+import {router, navigate} from "../router.js";
+import {store} from "../store.js";
+import location from "../location.js";
 let lastServerHash: number | null = null;
 
 declare global {

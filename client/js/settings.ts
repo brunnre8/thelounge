@@ -1,5 +1,5 @@
-import socket from "./socket";
-import type {TypedStore} from "./store";
+import socket from "./socket.js";
+import type {TypedStore} from "./store.js";
 
 const defaultSettingConfig = {
 	apply() {},

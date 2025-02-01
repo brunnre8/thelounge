@@ -1,8 +1,8 @@
-import socket from "../socket";
-import {store} from "../store";
-import {switchToChannel} from "../router";
-import {ClientChan} from "../types";
-import {toClientChan} from "../chan";
+import socket from "../socket.js";
+import {store} from "../store.js";
+import {switchToChannel} from "../router.js";
+import type {ClientChan} from "../types.js";
+import * as chanJs from "../chan.js";
 
 socket.on("join", function (data) {
 	const network = store.getters.findNetwork(data.network);
@@ -11,7 +11,7 @@ socket.on("join", function (data) {
 		return;
 	}
 
-	const clientChan: ClientChan = toClientChan(data.chan);
+	const clientChan: ClientChan = chanJs.toClientChan(data.chan);
 	network.channels.splice(data.index || -1, 0, clientChan);
 
 	// Queries do not automatically focus, unless the user did a whois

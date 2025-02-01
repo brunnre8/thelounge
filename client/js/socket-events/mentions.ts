@@ -1,7 +1,7 @@
-import socket from "../socket";
-import {store} from "../store";
-import {ClientMention} from "../types";
-import {SharedMention} from "../../../shared/types/mention";
+import socket from "../socket.js";
+import {store} from "../store.js";
+import type {ClientMention} from "../types.js";
+import type {SharedMention} from "../../../shared/types/mention.js";
 
 socket.on("mentions:list", function (data) {
 	store.commit("mentions", data.map(sharedToClientMention));

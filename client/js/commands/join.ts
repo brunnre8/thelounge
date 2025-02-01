@@ -1,7 +1,7 @@
-import socket from "../socket";
-import {store} from "../store";
-import {switchToChannel} from "../router";
-import {ChanType} from "../../../shared/types/chan";
+import socket from "../socket.js";
+import {store} from "../store.js";
+import {switchToChannel} from "../router.js";
+import {ChanType} from "../../../shared/types/chan.js";
 
 export function input(args: string[]): boolean {
 	if (args.length > 0) {

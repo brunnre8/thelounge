@@ -1,6 +1,6 @@
-import socket from "../socket";
-import {switchToChannel, navigate} from "../router";
-import {store} from "../store";
+import socket from "../socket.js";
+import {switchToChannel, navigate} from "../router.js";
+import {store} from "../store.js";
 
 socket.on("quit", async function (data) {
 	// If we're in a channel, and it's on the network that is being removed,

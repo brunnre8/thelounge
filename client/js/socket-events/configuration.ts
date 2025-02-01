@@ -1,6 +1,6 @@
-import socket from "../socket";
-import upload from "../upload";
-import {store} from "../store";
+import socket from "../socket.js";
+import upload from "../upload.js";
+import {store} from "../store.js";
 
 socket.once("configuration", function (data) {
 	store.commit("serverConfiguration", data);

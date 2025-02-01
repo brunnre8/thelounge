@@ -1,5 +1,5 @@
 import io, {Socket as rawSocket} from "socket.io-client";
-import type {ServerToClientEvents, ClientToServerEvents} from "../../shared/types/socket-events";
+import type {ServerToClientEvents, ClientToServerEvents} from "../../shared/types/socket-events.js";
 
 type Socket = rawSocket<ServerToClientEvents, ClientToServerEvents>;
 

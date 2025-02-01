@@ -1,10 +1,10 @@
-import socket from "../socket";
-import eventbus from "../eventbus";
-import type {ClientChan, ClientNetwork, ClientUser} from "../types";
-import {switchToChannel} from "../router";
-import {TypedStore} from "../store";
-import useCloseChannel from "../hooks/use-close-channel";
-import {ChanType} from "../../../shared/types/chan";
+import socket from "../socket.js";
+import eventbus from "../eventbus.js";
+import type {ClientChan, ClientNetwork, ClientUser} from "../types.js";
+import {switchToChannel} from "../router.js";
+import type {TypedStore} from "../store.js";
+import useCloseChannel from "../hooks/use-close-channel.js";
+import {ChanType} from "../../../shared/types/chan.js";
 
 type BaseContextMenuItem = {
 	label: string;
