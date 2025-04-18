@@ -1,8 +1,12 @@
+import pcImport from "postcss-import";
+import presetEnv from "postcss-preset-env";
+import cssnano from "cssnano";
+
 module.exports = {
 	plugins: [
-		require("postcss-import")(),
-		require("postcss-preset-env")(),
-		require("cssnano")({
+		pcImport(),
+		presetEnv(),
+		cssnano({
 			preset: [
 				"default",
 				{
