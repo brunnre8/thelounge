@@ -12,6 +12,12 @@
 	</li>
 </template>
 
+<style scoped>
+button:focus {
+	color: red;
+}
+</style>
+
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useRoute} from "vue-router";

@@ -1,6 +1,6 @@
 <template>
 	<!-- 220px is the width of the sidebar, and we add 100px to allow for the text -->
-	<aside class="settings-menu">
+	<nav class="settings-menu">
 		<h2>Settings</h2>
 		<ul role="navigation" aria-label="Settings tabs">
 			<SettingTabItem name="General" class-name="general" to="" />
@@ -8,7 +8,7 @@
 			<SettingTabItem name="Notifications" class-name="notifications" to="notifications" />
 			<SettingTabItem name="Account" class-name="account" to="account" />
 		</ul>
-	</aside>
+	</nav>
 </template>
 
 <style>
