@@ -112,6 +112,7 @@ export type ConfigType = {
 	ldap: Ldap;
 	debug: Debug;
 	themeColor: string;
+	tosFilePath?: string;
 };
 
 class Config {

@@ -873,6 +873,7 @@ function getClientConfiguration(): SharedConfiguration | LockedSharedConfigurati
 		useHexIp: Config.values.useHexIp,
 		prefetch: Config.values.prefetch,
 		fileUploadMaxFileSize: Uploader ? Uploader.getMaxFileSize() : undefined, // TODO can't be undefined?
+		tosFileText: getTosFileText(Config.values.tosFilePath) || "error loading tos file",
 	};
 
 	const defaultsOverride = {
@@ -1102,5 +1103,20 @@ function reverseDnsLookup(ip: string, callback: (hostname: string) => void) {
 	} catch (err) {
 		log.error(`failed to resolve rDNS for ${ip}, using ip instead`, (err as any).toString());
 		setImmediate(callback, ip); // makes sure we always behave asynchronously
+	}
+}
+
+function getTosFileText(p?: string): string | undefined {
+	if (!p) {
+		return undefined;
+	}
+
+	try {
+		const data = fs.readFileSync(p, "utf8");
+		return data;
+	} catch (err: any) {
+		// 🤷
+		log.error(`couldn't read tos file: ${err}`);
+		return undefined;
 	}
 }

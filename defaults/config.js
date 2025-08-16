@@ -490,6 +490,13 @@ module.exports = {
 		},
 	},
 
+	// ## Terms of service
+
+	// When in public mode, embeds a html document into the connect page.
+	// Set it to a path containing properly formatted html
+	// The setting is ignored if public: false is set.
+	tosFilePath: undefined,
+
 	// ## Debugging settings
 
 	// The `debug` object contains several settings to enable debugging in The

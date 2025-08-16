@@ -320,6 +320,11 @@ the server tab on new connection"
 						</RevealPassword>
 					</div>
 				</template>
+				<template v-if="store.state.serverConfiguration.tosFileText">
+					<div class="tos-text">
+						<div v-html="store.state.serverConfiguration.tosFileText"></div>
+					</div>
+				</template>
 			</template>
 			<template v-else>
 				<h2 id="label-auth">Authentication</h2>
